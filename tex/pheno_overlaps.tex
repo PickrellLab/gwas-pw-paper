@@ -1,0 +1,603 @@
+
+\documentclass[11pt,titlepage]{article} 
+\usepackage[square,sort&compress]{natbib}
+%\usepackage[round]{natbib} 
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{longtable}
+
+\usepackage{caption}
+\captionsetup{labelsep = none}
+\usepackage{graphicx,rotating}
+\usepackage{physymb}
+
+\usepackage{setspace}
+\usepackage[table]{xcolor}
+\definecolor{lightgray}{gray}{0.9}
+%\bibliographystyle{elsart-harv}
+
+%\bibliographystyle{JRSS}
+\bibliographystyle{genres}
+%\usepackage[margin=1in]{geometry}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\doublespacing
+\renewcommand{\rmdefault}{ptm} 
+\usepackage{mathptmx} 
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage[margin=1in]{geometry}
+\renewcommand{\baselinestretch}{1.05}    %or 1.4 maybe?
+%\setlength{\oddsidemargin}{0cm} \setlength{\textwidth}{6.5in}
+%\setlength{\topmargin}{0in} \setlength{\topmargin}{-.5in}
+
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcommand\encircle[1]{%
+  \tikz[baseline=(X.base)] 
+    \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
+%this version seems to work better for pdf (?)
+\setlength{\textheight}{9.5in}
+%%
+%% Select one of the two - the second gets rid of comments.
+%% Leave the blank lines in
+\def\comment#1{
+
+\smallskip\noindent{\it [{#1}]}
+
+\smallskip\noindent
+}
+%\def\comment#1{}
+
+
+\begin{document}
+\title{Detection and interpretation of shared genetic influences on 40 human traits}
+\author{Joseph K. Pickrell$^{1,2, \dagger}$, Tomaz Berisa${^1}$, Laure Segurel$^{3}$, Joyce Y. Tung${^4}$, David Hinds${^4}$\\ \\
+\small $^1$ New York Genome Center, New York, NY, USA\\
+\small $^2$ Department of Biological Sciences, Columbia University, New York, NY, USA \\
+\small $^3$ CNRS, Paris, France \\
+\small $^4$ 23andMe, Inc., Mountain View, CA, USA\\
+\small $^\dagger$ Correspondence to: \url{jkpickrell@nygenome.org}
+}
+\maketitle
+\begin{abstract}
+We performed a genome-wide scan for genetic variants that influence multiple human phenotypes by comparing large genome-wide association studies (GWAS) of 40 traits or diseases, including anthropometric traits (e.g. nose size and male pattern baldness), immune traits (e.g. susceptibility to childhood ear infections and Crohn's disease), metabolic phenotypes (e.g. type 2 diabetes and lipid levels), and psychiatric diseases (e.g. schizophrenia and Parkinson's disease). First, we identified 307 loci (at a false discovery rate of 10\%) that influence multiple traits (excluding ``trivial" phenotype pairs like type 2 diabetes and fasting glucose). Several loci influence a large number of phenotypes; for example, variants near the blood group gene ABO influence eleven of these traits, including risk of childhood ear infections (rs635634: log-odds ratio = 0.06, P = $1.4 \times 10^{-8}$) and allergies (log-odds ratio = 0.05, $P = 2.5\times 10^{-8}$), among others. Similarly, a nonsynonymous variant in the zinc transporter SLC39A8 influences seven of these traits, including risk of schizophrenia (rs13107325: log-odds ratio = 0.15, $P = 2 \times 10^{-12}$) and Parkinson's disease (log-odds ratio = -0.15, $P = 1.6 \times 10^{-7}$), among others. Second, we used these loci to identify traits that share multiple genetic causes in common. For example, genetic variants that delay age of menarche in women also, on average, delay age of voice drop in men, decrease body mass index (BMI), increase adult height, and decrease risk of male pattern baldness. Finally, we identified four pairs of traits that show evidence of a causal relationship. For example, we show evidence that increased BMI causally increases triglyceride levels, and that increased liability to hypothyroidism causally decreases adult height.   
+\end{abstract}
+%\tableofcontents
+\clearpage
+\section{Introduction}
+The observation that a genetic variant affects multiple phenotypes (a phenomenon often called ``pleiotropy" \citep{Stearns:2010aa, Paaby:2013aa, Solovieff:2013aa}, though we will not use this term) is informative in a number of applications. 
+One such application is to learn about the molecular function of a gene. 
+For example, men with the genetic disease cystic fibrosis (primarily known as a lung disease) are often infertile due to congenital absence of the vas deferens; this is evidence of a shared role for the CFTR protein in lung function and the development of reproductive organs \citep{chillon1995mutations}. 
+Another application is to learn about the causal relationships between traits. 
+For example, individuals with congenital hypercholesterolemia also have elevated risk of heart disease \citep{muller1938xanthomata}; this is now interpreted as evidence that changes in lipid levels causally influence heart disease risk \citep{Steinberg:2002aa}. 
+
+In these two applications, the same observation--that a genetic variant influences two traits--is interpreted in fundamentally different ways depending on known aspects of biology. 
+In the first case, a genetic variant influences the two phenotypes through independent physiological mechanisms  (graphically:\\ \encircle{$P_1$} $\leftarrow$ \encircle{$G$} $\rightarrow$ \encircle{$P_2$}, if $G$ represents the genotype, $P_1$ the first phenotype, $P_2$ the second phenotype, and the arrows represent causal relationships \citep{pearl2000causality}), while in the second case,   \encircle{$G$} $\rightarrow$ \encircle{$P_1$} $\rightarrow$ \encircle{$P_2$}. 
+In some situations, knowing which interpretation of the observation to prefer is simple: for example, it seems difficult to imagine how the reproductive and lung phenotypes of a CFTR mutation could be related in a causal chain. 
+In other situations, interpretation is considerably more challenging. 
+For example, the causal connections between various lipid phenotypes and heart disease have been debated for decades (e.g. \citet{Steinberg:1989aa}). 
+ 
+As the number of reliable associations between genetic variants and various phenotypes has grown over the last decade \citep{Visscher:2012fk}, these issues have received increasing attention. 
+A number of studies have identified genetic variants that influence multiple traits \citep{Cotsapas:2011aa, Andreassen:2013aa, Andreassen:2013ab, Elliott:2013aa, Sivakumaran:2011aa, Stefansson:2014aa, Styrkarsdottir:2013aa, Estrada:2012aa, Moltke:2014aa, Pendergrass:2013aa, Li:2014aa}; in general, these associations are interpreted as most plausibly due to independent effects of a genetic variant on different aspects of physiology.  
+For example, a genetic variant in LGR4 is associated with bone mineral density (BMD), age at menarche, and risk of gallbladder cancer \citep{Styrkarsdottir:2013aa}, presumably due to effects mediated through different tissues.
+
+There has also been increasing interest in the alternative, causal framework for interpreting genetic variants that influence multiple phenotypes, which has been formalized under the name ``Mendelian randomization" \citep{Katan:1986aa, smith2004mendelian, Davey-Smith:2014aa}. 
+Mendelian randomization has been used to provide evidence for (or against) a causal role for various clinical variables in disease etiology \citep{Voight:2012aa, Lim:2014aa, Panoutsopoulou:2013aa, Holmes:2014aa, De-Silva:2011aa, Granell:2014aa, Pichler:2013aa}. 
+For example, genetic variants associated with body mass index (BMI) are also associated with type 2 diabetes \citep{Holmes:2014aa}; this is consistent with a causal role for weight gain in the etiology of diabetes.
+
+To date, most studies of multiple traits have been performed in a targeted fashion--for example, there have been scans for variants that influence multiple autoimmune diseases \citep{Cotsapas:2011aa} or multiple psychiatric phenotypes \citep{Cross-Disorder-Group-of-the-Psychiatric-Genomics-Consortium:2013aa}. 
+We aimed to systematically search for genetic variants that influence pairs of traits, and then to interpret these associations in the light of the causal and non-causal models described above.  
+In this paper, we describe the results of such a search using large genome-wide association studies of 40 traits.  
+
+
+\section{Results}
+We assembled summary statistics from 41 genome-wide association studies of 40 traits or diseases performed in individuals of European descent (Table \ref{table_phenos}; two of these GWAS are for age at menarche). 
+These studies span a wide range of phenotypes, from anthropometric traits (e.g. height, BMI, nose size) to neurological disease (e.g. Alzheimer's disease, Parkinson's disease) to susceptibility to infection (e.g. childhood ear infections, tonsillectomy).
+For studies that were not done using imputation to all variants in phase 1 of the 1000 Genomes Project \citep{abecasis2010map}, we performed imputation at the level of summary statistics using ImpG v1.0 \citep{Pasaniuc:2014aa}. 
+We estimated the approximate number of independent associated variants (at a false discovery rate of 10\%) in each study using fgwas v.0.3.6 \citep{pickrell2013joint}. 
+The number of associations ranged from around five (for age at voice drop in men) to over 500 (for height). 
+\begin{table}[htdp]
+\caption{. \textbf{Phenotypes used in this study.} For each study, we show the name of the phenotype, the abbreviation that will be used throughout this paper, the data source, the number of independent autosomal loci identified at a false discovery rate of 10\%, and the number of participants in the study. For studies where the data source is 23andMe, a complete description of the GWAS is presented in the Supplementary Material.}
+\begin{center}
+\rowcolors{1}{}{lightgray}
+\footnotesize{
+\begin{tabular}{|c|c| C{3.5cm}| C{2cm}| C{3cm}| }
+\hline
+Phenotype & Abbreviation & Data source & Approx. \# of loci & Approx. \# of participants, in thousands (cases/controls, if applicable)\\
+\hline
+Alzheimer's disease & AD & \citep{Lambert:2013aa} & 11 & 17 / 37\\ 
+Age at menarche & AAM &\citep{Perry:2014aa} & 70 & 133 \\ 
+Age at menarche (23andMe) & AAM (23) & 23andMe & 55 & 77 \\ 
+Height & HEIGHT & \citep{Wood:2014aa} & 584 & 253 \\ 
+Schizophrenia & SCZ & \citep{Schizophrenia-Working-Group-of-the-Psychiatric-Genomics-Consortium:2014aa} & 222 & 34  / 46 \\ 
+Rheumatoid arthritis & RA & \citep{Okada:2014aa} & 74 &14 / 44 \\ 
+Coronary artery disease & CAD & \citep{Schunkert:2011aa} & 11 & 22 / 65\\ 
+Type 2 diabetes & T2D & \citep{Morris:2012aa} & 11  & 12 / 57\\ 
+Crohn's disease & CD &  \citep{jostins2012host} & 61 & 6 / 15  \\ 
+Fasting glucose & FG& \citep{manning2012genome}& 15 & 58 \\ 
+Hemoglobin & HB & \citep{van2012seventy} & 16 & 51 \\ 
+Mean cell hemoglobin concentration & MCHC & \citep{van2012seventy}& 15 & 46 \\ 
+Mean red cell volume & MCV & \citep{van2012seventy} & 42 & 48 \\
+Packed red cell volume & PCV & \citep{van2012seventy} & 13 & 44\\
+Red blood cell count & RBC & \citep{van2012seventy} & 25  & 45 \\ 
+Body mass index & BMI & \citep{Locke:2015aa}  & 30 & 240 \\ 
+Waist-hip ratio & WHR & \citep{Shungin:2015aa}  & 13 & 143 \\ 
+Low-density lipoproteins & LDL & \citep{teslovich2010biological} & 41 & 85 \\ 
+High-density lipoproteins & HDL & \citep{teslovich2010biological} & 46 & 89\\ 
+Triglycerides & TG &\citep{teslovich2010biological} & 31 & 86 \\ 
+Total cholesterol & TC & \citep{teslovich2010biological} & 53 & 89 \\ 
+Bone mineral density (femoral neck) & FNBMD & \citep{Estrada:2012aa} & 19 & 33\\ 
+Bone mineral density (lumbar spine) & LSBMD & \citep{Estrada:2012aa} & 21 & 32\\
+Platelet count & PLT &  \citep{gieger2011new} & 50 & 44 \\ 
+Mean platelet volume & MPV &  \citep{gieger2011new} & 29 & 17 \\ 
+Any allergies & ALL & 23andMe& 43 & 67 / 114 \\ 
+Asthma & ATH & 23andMe & 35 & 28 / 129 \\ 
+Age at voice drop & AVD & 23andMe & 5 & 56 \\ 
+Beighton hypermobility & BHM & 23andMe & 18 & 64\\ 
+Childhood ear infections & CEI& 23andMe& 15 & 47 / 75\\ 
+Breast size & CUP & 23andMe&14 & 34 \\
+Chin dimples & DIMP & 23andMe&57 & 58 / 13\\ 
+Hypothyroidism & HTHY& 23andMe &30 & 18 / 117 \\
+Migraine & MIGR& 23andMe&37 & 53 / 231 \\ 
+Male pattern baldness &MPB& 23andMe&49 & 9 / 8 \\ 
+Nose size & NOSE & 23andMe&13 & 67 \\ 
+Nearsightedness & NST & 23andMe&183 & 106 / 86\\ 
+Parkinson's disease & PD & 23andMe& 43 & 10 / 325 \\ 
+Photic sneeze reflex & PS & 23andMe & 66 & 32 / 67\\ 
+Tonsillectomy & TS & 23andMe&  48 & 60 / 113\\ 
+Unibrow & UB& 23andMe&61 & 69 \\ 
+\hline
+\end{tabular}
+} 
+\end{center}
+\label{table_phenos}
+\end{table}
+
+
+\subsection{A model for identification of genetic variants that influence pairs of traits}
+
+We first aimed to identify genetic variants that influence pairs of traits. 
+To do this, we developed a statistical model (extending that used by \citet{Giambartolomei:2014aa}) to estimate the probability that a given genomic region either 1) contains a genetic variant that influences the first trait, 2) contains a genetic variant that influences the second trait, 3) contains a genetic variant that influences both traits, or 4) contains both a genetic variant that influences the first trait and a separate genetic variant that influences the second trait (Figure \ref{f_schematic}). 
+The input to the model is the set of summary statistics (effect size estimates and standard errors) for each SNP in the genome on each of the two phenotypes, and (if the two GWAS were performed on overlapping sets of individuals) the expected correlation in the summary statistics due to correlation between the phenotypes.  
+We can then fit the following log-likelihood function:
+
+
+\begin{equation}
+l(\theta | D) = \sum \limits_{i = 1}^M \ln \bigg[ \Pi_0 + \sum \limits_{j = 1}^4 \Pi_j RBF_i^{(j)} \bigg],
+\end{equation}
+\noindent where $D$ is the data, $M$ is the number of approximately independent blocks in the genome, $\Pi_0$ is the prior probability that a region contains no genetic variants than influence either trait, $\Pi_1, \Pi_2, \Pi_3$, and $\Pi_4$ represent the prior probabilities of the four models described above, $\theta$ is the set of all five prior parameters, and $RBF_i^{(j)}$ is the regional Bayes factor measuring the support for model $j$ in genomic region $i$ (see Methods for details). 
+In the presence of missing data, we consider only the subset of SNPs with data in both studies; if the causal SNP is not present this acts to reduce power to detect a shared effect \citep{Giambartolomei:2014aa}. 
+In fitting this model, we estimate the prior parameters and the posterior probability of each model for each region of the genome (for numerical stability, in practice we penalize the estimates of the prior parameters, and so obtain maximum \emph{a posteriori} estimates). 
+We were mainly interested in the estimated prior probability that each genomic region contains a variant that influences both trait ($\hat \Pi_3$) and the corresponding posterior probabilities for each genomic region.
+
+Several caveats of this method are worth mentioning. 
+First, note that the parameter $\Pi_3$ is best thought of as the proportion of genomic regions that \emph{detectably} influence both traits--if one study is small and underpowered, this estimate will necessary be zero. 
+This contrasts with methods that aim to provide unbiased estimates of the ``genetic correlation" between traits that do not depend on sample size \citep{bulik2015atlas, Yang:2011aa, Loh:2015aa}.
+Second, in general it is not possible to distinguish a single causal variant that influences both traits (Model 3 in Figure \ref{f_schematic}) from two separate causal variants (Model 4 in Figure \ref{f_schematic}) in the presence of strong linkage disequilibrium between the causal variants. 
+For any individual genomic region discussed below, the possibility of two highly correlated causal variants must be considered as an alternative possibility in the absence of functional follow-up. 
+Finally, we evaluated the method in simulations (Supplementary Figures 1-4), and found that the model gives a small overestimate of proportion of shared effects (Supplementary Figure 3). 
+This is because the amount of evidence against the null model of no associations is greater when a variant influences both phenotypes compared to when it only influence a single phenotype (Supplementary Figure 4). 
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.7]{figs/schematic.pdf}
+\caption{. \textbf{Schematic of the different models considered for a given genomic region and two GWAS.} We divide the genome into approximately independent blocks (see Methods), and estimate the proportion of blocks that fit into the shown patterns. The null model with no associations is not shown. Each point represents a single genetic variant.}\label{f_schematic}
+\end{center}
+\end{figure}
+
+
+\subsection{Identification of variants that influence pairs of traits across 41 GWAS}
+We applied the method to all pairs of the 41 GWAS listed in Table \ref{table_phenos}.
+For each pair of studies, we first estimated the expected correlation in the effect sizes from the summary statistics, and included this correction for overlapping individuals in the model. 
+Note that this is conservative: in pairs of GWAS where we are sure there are no overlapping individuals (for example, age at menarche and age at voice drop) we see that the correlation in the summary statistics is non-zero, indicating that we are correcting out some truly shared genetic effects on the two traits (Supplementary Figure 6).
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.8]{figs/heatmap.pdf}
+\caption{. \textbf{Heatmap showing patterns of overlap between traits.} Each square $[i,j]$ shows the maximum \emph{a posteriori} estimate of the proportion of genetic variants that influence trait $i$ that also influence trait $j$, where $i$ indexes rows and $j$ indexes columns. Note that this is not symmetric. Darker colors represent larger proportions. Colors are shown for all pairs of traits that have at least one region in the set of 307 identified loci; all other pairs are set to white. Phenotypes were clustered by hierarchical clustering in R \citep{R-Core-Team:2013aa}}\label{f_overlap}
+\end{center}
+\end{figure}
+
+
+To gain an exploratory sense of the relationships between the phenotypes, we examined the patterns of overlap in associations among all 41 studies. 
+Specifically, the model can be used to estimate, for each pair of traits $[i,j]$, the proportion of detected variants that influence trait $i$ that also detectably influence trait $j$.
+These estimates are shown in Figure \ref{f_overlap}, with phenotypes clustered according to their patterns of overlap. 
+We see several clusters of related traits. 
+For example, of the variants that detectably influence age at menarche (in the \citet{Perry:2014aa} study), the maximum \emph{a posteriori} estimate is that 36\% detectably influence height, 30\% detectably influence age at voice drop, 28\% influence BMI, 10\% influence breast size, and 10\% influence male pattern baldness. 
+We interpret this as a set of phenotypes that share hormonal regulation. 
+Additionally, there is a large cluster of phenotypes including coronary artery disease, type 2 diabetes, red blood cell traits, and lipid traits, which we interpret as a set of metabolic traits.
+Further, immune-related disease (allergies, asthma, hypothyroidism, Crohn's disease and rheumatoid arthritis) all cluster together, and also cluster with infectious disease traits (childhood ear infections and tonsillectomy). 
+This biologically-revelant clustering validates the principle that GWAS variants can identify shared mechanisms underlying pairs of traits in a systematic way.
+As a control, we performed the same clustering of phenotypes by the estimated proportion of genomic regions where two causal sites fall nearby (Model 4 in Figure \ref{f_schematic}).
+In this case, there was no biologically-meaningful clustering (Supplementary Figure 7).
+
+
+\subsection{Individual loci that influence many traits}
+We next examined the individual loci identified by these pairwise GWAS.
+We identified 307 genomic regions where we infer the presence of a variant that influences a pair of traits, at a threshold of a posterior probability greater than 0.9 of model 3 (Supplementary Table 1). 
+This number excludes ``trivial" findings where a genetic variant influences two similar traits (two lipid traits, two red blood cell traits, two platelet traits, both measures of bone mineral density, or type 2 diabetes and fasting glucose) and the MHC region.
+ 
+Some genomic regions contain variants that influence a large number of the traits we considered. 
+We ranked each genomic region according to how many phenotypes share genetic associations in the region (that is, if the pairwise scan for both height and CAD, and the pairwise scan for CAD and LDL, both indicated the same region, we counted this as three phenotypes sharing an association in the region)
+The top region in this ranking identified a non-synonymous polymorphism in SH2B3 (rs3184504) that is associated with a number of autoimmune diseases, lipid traits, heart disease, and red blood cell traits (Supplementary Figure 8; Supplementary Table 2). 
+This variant has been identified in many GWAS, particularly for autoimmune disease \citep{Richard-Miceli:2012aa}.
+
+The next region in this ranking contains the gene coding for the ABO blood groups in humans, and has a variant associated with 11 traits in these data (and many other additional traits not in these data, see also \citep{Schunkert:2011aa, Wessel:2015aa, Franchini:2015aa}). 
+In Figure \ref{f_eg}A, we show the association statistics in this region for coronary artery disease and probability of having a tonsillectomy.
+At the lead SNP, the non-reference allele is associated with increased risk of CAD (Z = 5.7; P = $1.1 \times 10^{-8}$) and increased risk of having a tonsillectomy (Z = 6.0; P = $1.5 \times 10^{-9}$). 
+This variant is also strongly associated with other immune, red blood cell, and lipid traits in these data (Figure \ref{f_eg}B). 
+A tag for a microsatellite that influences the expression of ABO \citep{Kominato:1997aa} is correlated to the lead SNP rs635634, as is a tag for the O blood group (Figure \ref{f_eg}A). 
+However, the lead SNP is an eQTL for both ABO and the nearby gene SLC2A6 in whole blood \citep{Wessel:2015aa}, so this allele may in fact have downstream effects via effects on the expression of two genes.
+
+Among the top-ranked regions are also a non-synonymous variant in the zinc transporter SLC39A8 (rs13107325; Supplementary Figure 9) that is associated with schizophrenia (log-odds ratio of the non-reference allele = 0.15, 95\% CI = [0.11, 0.19], $P = 2 \times 10^{-12}$), Parkinson's disease (log-odds ratio = -0.15, 95\% CI = [-0.21, -0.10], $P = 1.6 \times 10^{-7}$), and height ($\hat \beta = -0.03$ s.d., 95\% CI = [-0.04, -0.02], $P = 3.8\times 10^{-7}$), among others; a non-synonymous variant in the glucokinase regulator GCKR (rs1260326; Supplementary Figure 10) that is associated with fasting glucose ($\hat \beta = 0.06$, 95\% CI = [0.05, 0.07], $P =  5\times10^{-25}$) and height ($\hat \beta = 0.019$, 95\% CI = [0.013, 0.025], $P = 2.6\times 10^{-11}$), among others; and a region near the APOE gene (which we presume to be driven by the APOE4 allele; Supplementary Figure 11) that is associated with nearsightedness (log-odds ratio = -0.04, 95\% CI = [-0.06, -0.02], $P =  1.8 \times 10^{-5}$), waist-hip ratio ($\hat \beta = -0.02$, 95\% CI = [-0.03, -0.01], $P = 8.3\times 10^{-5}$), and several lipid traits apart from its well-known association with Alzheimer's disease. 
+It has previously been observed that association signals for different phenotypes tend to cluster spatially in the genome \citep{Jeck:2012aa}; these results suggest that in some cases clustered associations are driven by single variants. 
+We note anecdotally that the variants that influence a large number of phenotypes seem to often be non-synonymous, rather than regulatory, changes, which contrasts with the pattern seen in association studies overall (e.g. \citet{pickrell2013joint}).
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.7]{figs/CAD_TS_ABOregion.pdf}
+\caption{. \textbf{Multiple associations near the ABO gene. A. Association signals for coronary artery disease and tonsillectomy.} In the top panel, we show the P-values for association with CAD for variants in the window around the ABO gene. In the bottom panel are the P-values for association with tonsillectomy. In both panels, SNPs that tag functionally-important alleles at ABO are in color. In the middle are the gene models in the region--exons are denoted by blue boxes, and introns with red lines. Note that the ABO gene is transcribed on the negative strand. \textbf{B. Association effect sizes for rs635634 on all tested traits.} Shown are the effect size estimates for rs635634 for all traits. The lines represent 95\% confidence intervals. Traits are grouped according to whether they are quantitative traits (in which case the x-axis is in units of standard deviations) or case/control traits (in which case the x-axis is in units of log-odds). }\label{f_eg}
+\end{center}
+\end{figure}
+
+\subsection{Identifying pairs of phenotypes with correlated effect sizes}
+In our scan for variants that influence pairs of phenotypes, we did not assume any relationship between the effect sizes of the variant on the two phenotypes. 
+However, if two traits are influenced by shared underlying molecular mechanisms, we might expect the effect of a variant on the two phenotypes to be correlated. 
+To test this, we returned to the set of variants identified by analysis of each phenotype individually (the numbers of these variants for each trait are in Table \ref{table_phenos}).
+For each set, we calculated the rank correlation between the effect sizes of the variants on the index trait (the one in which the variants were identified) and all of the other traits. 
+
+The results of this analysis are presented in Figure \ref{f_corr}. 
+Apart from closely related traits (e.g. the two measurements of bone density), we see a number of traits that are correlated at a genetic level.
+We focus on two of these. 
+First, variants that delay age of menarche in women tend, on average, to decrease BMI ($\rho = -0.53, P = 1.2 \times 10^{-6}$, reduce risk of male pattern baldness ($\rho = -0.45, P = 5.9\times 10^{-5}$), and increase height ($\rho = 0.52, P = 2.2 \times 10^{-6}$; Figure \ref{f_corr}).
+These patterns hold both for the GWAS on age at menarche performed by \citet{Perry:2014aa} and that performed by 23andMe (Figure \ref{f_corr}).
+Most of these variants also delay age at voice drop in men (Figure \ref{f_overlap}), so we interpret these variants as ones that influence pubertal timing in general. 
+The negative correlation between a variant's effect on age at menarche and BMI has previously been observed \citep{Elks:2010aa, Perry:2014aa, bulik2015atlas}, as has the positive correlation between a variant's effect on age at menarche and height \citep{Perry:2014aa, bulik2015atlas}.
+The negative correlation between a variant's effect on age at menarche (or more likely, puberty in general) and male pattern baldness has not been previously noted, but is consistent with the known role for increased androgen signaling in causing hair loss \citep{Li:2012aa, Richards:2008aa, HAMILTON:1951aa}. 
+
+Second, we find that genetic variants that increase height tend to decrease triglycerides ($\rho = -0.24, P = 4.2 \times 10^{-9}$, LDL cholesterol ($\rho = -0.2, P = 1.1 \times 10^{-6}$), and risk of heart disease ($\rho = -0.19, P = 6.4\times 10^{-6}$). 
+These results are consistent with estimates of the genetic correlations between these traits \citep{bulik2015atlas, Nelson:2015aa} and the epidemiological observation that taller individuals have lower risk of heart disease  \citep{Hebert:1993aa, Paajanen:2010aa, GERTLER:1951aa}. 
+Though the biological mechanism underlying this correlation is unclear (see discussion in \citet{Hebert:1993aa} and \citet{Nelson:2015aa}), the genetic data provides evidence against the existence of an unmeasured environmental confounding factor in the epidemiological studies. 
+
+\subsection{Inferring causal relationships between traits}
+Finally, we were interested in identifying pairs of traits may be related in a causal manner. 
+Since we are using observational data (rather than, for example, a randomized controlled trial), we view strong statements about causality as impossible. 
+However, a realistic goal might be to identify aspects of the data that are more consistent with a causal model versus a non-causal model.
+
+As a motivating example, we considered the correlation between levels of LDL cholesterol and risk coronary artery disease, now widely accepted as a causal relationship \citep{:1994aa}. 
+We noticed that variants ascertained as having an effect on LDL cholesterol levels have correlated effects on risk of coronary artery disease (Figure \ref{f_corr}, Figure \ref{f_causal}C), while variants ascertained as having an effect on CAD risk do not in general have correlated effects on LDL levels (Figure \ref{f_causal}D). 
+This is consistent with the hypothesis that LDL cholesterol is one of many causal factors that influence CAD risk. 
+An alternative interpretation is that LDL cholesterol is highly genetically correlated to an unobserved trait that causally influences risk of CAD. 
+
+We developed a method to detect pairs of traits that show this asymmetry in the effect sizes of associated variants, which we interpret as more consistent with a causal relationship between the traits than a non-causal one (Methods).
+At a threshold of a relative likelihood of 100 in favor of a causal versus a non-causal model, we identified five pairs of putative causally-related traits. (At a less stringent threshold of a relative likelihood of 20 in favor of a causal model, we identified 10 additional pairs of traits, see Supplementary Figure 10). 
+Four of these are shown in Figure \ref{f_corr}. 
+First, genetic variants that influence BMI have correlated effects on triglyceride levels, while the reverse is not true; this suggests increased BMI is a cause for increased triglyceride levels (Figure \ref{f_corr}).
+Randomized controlled trials of weight loss are also consistent with this causal link \citep{Look-AHEAD-Research-Group:2007aa, Shai:2008aa}, as are Mendelian randomization studies \citep{Wurtz:2014aa, Freathy:2008aa}.
+Second, we confirm the evidence in favor of a causal role for increased LDL cholesterol in coronary artery disease (Figure \ref{f_corr}), and in favor of a causal role for increased BMI in type 2 diabetes risk (Figure \ref{f_corr}). 
+Finally, we suggest that increased risk of hypothyroidism causes decreased height (Figure \ref{f_corr}). 
+While it is known that severe hypothyroidism in childhood leads to decreased adult height (e.g. \citet{Rivkees:1988aa}), these data indicate that hypothyroidism susceptibility may also influence height in the general population.  
+A fifth potentially causal relationship (between risk of coronary artery disease and rheumatoid arthritis) could not be confirmed in a larger study and so is not displayed (see Supplementary Information, Supplementary Figure 13).
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.8]{figs/heatmap_betas.pdf}
+\caption{. \textbf{Heatmap showing patterns of correlated effect sizes of variants across pairs of traits.} For each pair of traits $[i,j]$, we extracted the set of variants that influence trait $i$ and their effect sizes on both $i$ and $j$. We then calculated Spearman's rank correlation between the effect sizes on $i$ and the effect sizes on $j$, and tested whether this correlation was significantly different from zero. Shown in color are all pairs where this test had a P-value less than 0.01. Darker colors correspond to smaller P-values, and the color corresponds to the direction of the correlation (in red are positive correlations and in blue are negative correlations). The phenotypes are in the same order as in Figure \ref{f_overlap}. }\label{f_corr}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.8]{figs/causal2.pdf}
+\caption{. \textbf{Putative causal relationships between pairs of traits.} For each pair of traits identified as candidates to be related in a causal manner (see Methods), we show the effect sizes of genetic variants on the two traits (at genetic variants successfully genotyped or imputed in both studies). Lines represent one standard error. \textbf{A. and B. BMI and triglycerides.}  The effect sizes of genetic variants on BMI and triglyceride levels for variants identified in the GWAS for BMI (\textbf{A.}) or triglycerides (\textbf{B.}).  \textbf{C. and D. LDL and CAD.}  The effect sizes of genetic variants on LDL levels and CAD for variants identified in the GWAS for LDL (\textbf{C.}) or CAD (\textbf{D.}). \textbf{E. and F. BMI and type 2 diabetes.}  The effect sizes of genetic variants on BMI and T2D for variants identified in the GWAS for BMI (\textbf{E.}) or T2D (\textbf{F.}). \textbf{G. and H. Hypothyroidism and height.}  The effect sizes of genetic variants on HTHY and height for variants identified in the GWAS for HTHY (\textbf{G.}) or height (\textbf{H.}). } \label{f_causal}
+\end{center}
+\end{figure}
+
+
+%As another example, a nonsynonymous variant in the cytokine regulator SH2B3 is associated with decreased risk of coronary artery disease (Z = -4.5; P = $6.4\times 10^{-6}$), decreased platelet count (Z = -10.7; P = $1.2\times 10^{-26}$),  decreased hemoglobin levels (Z = -8.9; P = $5.6\times 10^{-19}), and increased risk of rheumatoid arthritis (Z = 5.7; P = $2.9\times 10^{-6}$), among others (Supplementary Figure AAB). 
+
+\section{Discussion}
+We have performed a scan for genetic variants that influence multiple phenotypes, and have identified several hundred loci that influence multiple traits. This style of scan complements methods to quantify the ``genetic correlation" between two traits \citep{Lee:2012aa,Visscher:2014aa, bulik2015atlas, Loh:2015aa} that are not generally concerned with identifying individual variants that influence both traits. We were interested in using the individual variants identified to identify biological relationships between traits, including potential relationships when one trait is causally upstream of the other. Other potential mechanisms that could lead to an association between a genetic variant and two phenotypes include trans-generational effects of a variant on a parental phenotype and a separate phenotype in the offspring (e.g. \citet{Ueland:2001aa}) or assortative mating that involves more than a single trait \citep{Gianola:1982aa}.
+
+\paragraph{Genetic overlaps between traits.}
+One clear observation from these data is that genetic variants that influence puberty (age at menarche and age at voice drop) often have correlated effects on BMI, height, and male pattern baldness (Figure \ref{f_corr}). 
+In our scan for causal relationships between traits, we found modest evidence of a causal role of age at menarche in influencing adult height, and for a causal role of BMI in the development of male pattern baldness (Supplementary Figure 12). 
+The non-causal alternative (also consistent with the data) is that all of these traits are influenced by some of the same underlying biological pathways, and perhaps the most likely candidate is hormonal signaling. 
+This highlights the importance of considering evidence from multiple traits when interpreting the molecular consequences of a variant and designing experimental studies. 
+While variants that influence height overall are enriched near genes expressed in cartilage \citep{Wood:2014aa} and variants that influence BMI are enriched near genes expressed broadly in the central nervous system \citep{Locke:2015aa}, it seems a subset of these variants also influence age at menarche and male pattern baldness. 
+For these variants, it may be worth considering functional follow-up in gonadal tissues or specific brain regions known to be important in hormonal signaling.
+
+It is also striking to note how many genetic variants influence multiple traits (Figure \ref{f_overlap}) but without a consistent correlation in the effect sizes (Figure \ref{f_corr}). For example, many of the autoimmune and immune-related traits appear to share many genetic causes in common, but the effect sizes of the variants on the different traits appear to be largely uncorrelated (see also \citet{Cotsapas:2011aa, bulik2015atlas}). Likewise, many variants appear to influence lipid traits, red blood cell traits and immune traits, but without consistent directions of effect. A trivial explanation of this observation is that we are underpowered to detect correlations in the effect sizes because we are using only a small set of the SNPs with the strongest associations. However, the genetic correlations between many of these traits (calculated using all SNPs) are not significantly different from zero \citep{bulik2015atlas}. Another possibility is that a given genetic variant often influences the function of multiple cell types through separate molecular pathways, or that the effects of a variant on two related phenotypes vary according to an individual's environmental exposures.
+
+\paragraph{Causal relationships between traits.}
+From the point of view of epidemiology, the ability to scan through many pairs of traits to find those that are potentially causally related seems appealing, and some previous analyses have had similar goals \citep{Evans:2013aa}. 
+Our approach makes the key assumption that, if two traits are related in a causal manner, then the ``causal" trait is one of many factors that influence the ``caused" trait. 
+This induces an asymmetry in the effects of genetic variants on the two traits that can be detected (Figure \ref{f_causal}). 
+We also assume that we have identified a modest number of variants that influence both traits. 
+This naturally means we are limited to considering heritable traits that have been studied with in cohorts with moderate sample sizes (on the order of tens to hundreds of thousands of individuals). 
+It seems likely that the main limiting factor to scaling this approach (should it be generally useful) will be phenotyping rather than genotyping.
+
+\section{Methods} \label{model_sec}
+We obtained summary statistics from genome-wide association studies described in Table \ref{table_phenos}. The complete description of these studies is in the Supplementary Materials.
+
+\subsection{Counting independent numbers of associated variants}
+For each genome-wide association study, we ran fgwas v.0.3.6 \citep{pickrell2013joint} with the default settings, except that rather than splitting the genome into blocks with equal numbers of SNPs (as in \citet{pickrell2013joint}), we split the genome into approximately independent blocks based on patterns of linkage disequilibrium in the European populations in Phase 1 of the 1000 Genomes Project \citep{abecasis2010map}. These blocks are available at \url{https://bitbucket.org/nygcresearch/ldetect-data}. We used fgwas to estimate the prior probability that any block contains an association. The output of this model is, for each region of the genome, the posterior probability that it contains a variant that influences the trait. We used a threshold of a posterior probability of association of 0.9, as in \citet{pickrell2013joint}, which can be roughly interpreted as a false discovery rate of 10\%. For analyses that use variants identified in these individual GWAS, we extracted the single SNP from each region with the largest posterior probability of being the causal SNP in this model. 
+
+\subsection{Approximating the correlations in the effect sizes under the null model} \label{cor}
+For genome-wide association studies of correlated traits performed on overlapping individuals, we expect the observed association statistics of a given variant to both traits to be correlated, even under the null model that the variant influences neither trait. To approximate this expected correlation, for both traits we extracted all genomic regions with a posterior probability of containing an association less than 0.2 (using the method described above). We then extracted all SNPs from these regions, and calculated the correlation in the Z-scores between the two traits (using all SNPs remaining in both studies). This correlation is a function of the number of overlapping samples and the correlation in the phenotypes. Specifically, if $\vec g_1$ is a vector of (mean-centered) genotypes at a variant in study 1, $\vec x$ is a vector of (standard normally distributed) phenotypes in study 1, $\vec g_2$ is a set of is a vector of genotypes at a variant in study 2, and $\vec y$ is a vector of phenotypes in study 2, then: 
+
+\begin{align}
+Cor(Z_1, Z_2) &= E \bigg[  \frac{\sum_ig_{1i} x_i}{ \sqrt{\sum_i g_{1i}^2}}\frac{ \sum_j g_{2j} y_j}{ \sqrt{\sum_j g_{2j}^2}} \bigg] \\
+& \approx \frac{N_O}{\sqrt{N_1 N_2}} \rho,
+\end{align}
+\noindent where $N_O$ is the number of overlapping individuals in the two studies, $N_1$ is the number of individuals in study 1, $N_2$ is the number of individuals in study 2, and $\rho$ is the correlation between the phenotypes. We used this correlation as a correction factor in all pairwise GWAS. 
+
+\subsection{Hierarchical model}  \label{hm}
+In this section we describe the hierarchical model used for the main scan for overlapping association signals in two GWAS. Our goal is to write down a model that allows us to estimate the probability that a genomic locus contains a variant that influences two traits. Our approach is to split the genome into non-overlapping regions (we used the same approximately independent blocks as above); each region then falls into one of five categories, following \citet{Giambartolomei:2014aa}:
+\begin{enumerate}
+\setcounter{enumi}{-1}
+\item There are no SNPs in the region that influence either trait (denoted $RM_{0}$, for regional model 0),
+\item There is one causal SNP in the region that influences the first trait ($RM_1$),
+\item There is one causal SNP in the region that influences the second trait ($RM_2$),
+\item There is one causal SNP in the region that influences both traits ($RM_3$),
+\item There are two causal SNPs in the region, one of which influences the first trait and one of which influences the second ($RM_4$).
+\end{enumerate}
+
+We will estimate the proportion of genomic regions in each of these categories with an empirical Bayes approach. In what follows, we start by writing down the model for the simplest case where two phenotypes have been studied in separate cohorts, and then introduce modifications for the more complex situations that arise in real data. Software implementing the model is available at \url{https://github.com/joepickrell/gwas-pw}. 
+
+In the simplest case, consider two separate genome-wide association studies performed on two traits. In this case, the model is a hierarchical version of that in \citet{Giambartolomei:2014aa}, which we re-iterate here for completeness. Let there be $N_1$ individuals in GWAS of the first phenotype and $N_2$ individuals in the GWAS of the second phenotype. We start by considering a single SNP. Let $\vec g$ be the vector of genotypes at the SNP in the first study, $\vec h$ be the vector of genotypes at the SNP in the second study, $\vec x$ be the vector of phenotype measurements for the first phenotype (assumed to be distributed as a standard normal), and $\vec y$ be the vector of phenotype measurements for the second phenotype (also assumed to be distributed as a standard normal). We first need a measure of the evidence that the SNP influences each of the traits.
+
+\subsubsection{Bayes factor calculations} \label{snp_bf}
+We use a simple linear regression model to relate the phenotypes and the genotypes:
+
+\begin{align}
+E[x_i] &= \beta_1 g_i \\
+E[y_j] &= \beta_2 h_j.
+\end{align}
+
+There are four potential models to consider for this SNP:
+
+\begin{enumerate}
+\setcounter{enumi}{-1}
+\item $M_0$: the SNP is associated with neither trait
+\item $M_1$: the SNP is associated with the first trait (but not the second)
+\item $M_2$: the SNP is associated with the second trait (but not the first)
+\item $M_3$: the SNP is associated with both traits.
+\end{enumerate}
+
+Model $M_0$ corresponds to the case where $\beta_1 = 0$ and $\beta_2 = 0$, model $M_1$ corresponds to the case where $\beta_1$ is free to vary while $\beta_2 = 0$, and so on. We can thus define three Bayes factors corresponding to the evidence in favor of the three alternative models:
+
+\begin{align}
+BF^{(1)}  &= \frac{\int P(\vec x, \vec y | \vec g, \vec h, \theta_1) d \theta_1}{\int P(\vec x, \vec y | \vec g, \vec h, \theta_0) d \theta_0} \\
+BF^{(2)}  &= \frac{\int P(\vec x, \vec y| \vec g, \vec h, \theta_2) d \theta_2}{\int P(\vec x, \vec y | \vec g, \vec h,\theta_0) d \theta_0} \\
+BF^{(3)}  &= \frac{\int P(\vec x, \vec y | \vec g,  \vec h,\theta_3) d \theta_3}{\int P(\vec x, \vec y | \vec g,\vec h, \theta_0) d \theta_0},
+\end{align}
+\noindent where $\theta_j$ represents the parameters of model $j$. To compute these Bayes factors, we use the approximate Bayes factors from \citet{Wakefield:2008hc}. If we let $\hat \beta_1$ be the maximum likelihood estimate of $\beta_1$ and $\sqrt{V_1}$ be the standard error in that estimate, then $Z_1 = \frac{\hat \beta_1}{\sqrt{V_1}}$. If the prior on the true effect size is $\beta_1 \sim N(0, W_1)$ we can write down the Wakefield approximate Bayes factor measuring the evidence that the SNP is associated with the first phenotype:
+
+\begin{equation}
+WABF_1 = \sqrt{1-r_1} \exp \bigg[ \frac{Z_1^2}{2} r_1 \bigg],
+\end{equation}
+\noindent where $r_1 = \frac{W_1}{V_1+W_1}$. $WABF_2$ is defined analogously. In all applications, we averaged over Bayes factors computed with $W = 0.01, W = 0.1$, and  $W = 0.5$. To now connect these approximate Bayes factors to the three alternative models for the SNP \citep{Giambartolomei:2014aa}:
+
+\begin{align}
+BF^{(1)}  &= WABF_1 \\
+BF^{(2)}  &= WABF_2 \\
+BF^{(3)}  &= WABF_1 WABF_2,
+\end{align}
+\noindent where $BF^{(3)}$ is a consequence of the fact that the two cohorts are independent. 
+
+We note that in the Wakefield approximate Bayes factor the effect size of a SNP enters only through the Z-score. As a consequence, if we consider the ``reverse" regression model where we swap the genotypes and phenotypes:
+
+\begin{align}
+E[g_i] &= \beta_1^\prime x_i \\
+E[h_j] &= \beta_2^{\prime} y_j,
+\end{align}
+\noindent then the Bayes factors from this model are identical to the previous model (as long as the ratios $r_1$ and $r_2$ remain constant). In fact it is this latter ``reverse" regression that we will use going forward, though it is simpler to interpret parameters like the prior on the effect size in the traditional parameterization. 
+
+\subsubsection{Regional Bayes factor}
+We now consider a Bayes factor measuring the support for an association in a given genomic region $r$. To do this, now consider the matrix $\mathbf{G}_r$ of genotypes in the region in the first study (with $N_1$ rows of individuals and $K$ columns of SNPs) and the matrix $\mathbf{H}_r$ of genotypes in the region in the second study (with $N_2$ rows and $K$ columns). The vectors of phenotypes remain $\vec x$ and $\vec y$. We now want to write down Bayes factors measuring the evidence in favor of the four alternative models discussed at the beginning of Section \ref{model_sec} relative to the null model of no associations in the region. For regional model 1 (there is a single SNP casually associated with the first phenotype and none with the second phenotype):
+
+\begin{align}
+RBF_r^{(1)} &= \sum \limits_{i = 1}^{K} \frac{\pi_i^{(1)} P( \mathbf{G}_r, \mathbf{H}_r| \text{SNP $i$ is causal}, RM_1)}{P( \mathbf{G}_r, \mathbf{H}_r| RM_0)} \\
+&= \sum \limits_{i = 1}^{K} \pi_i^{(1)} BF_i^{(1)},
+\end{align} 
+\noindent where $\pi_i^{(1)}$ is the prior probability that SNP $i$ is the causal one under model 1. Note that the probabilities of all genotypes at the non-causal sites cancel out because they are identical once we have conditioned on the genotype at a causal site \citep{maller2012bayesian}. 
+
+Analogously, 
+
+\begin{align}
+RBF_r^{(2)}  &= \sum \limits_{i = 1}^{K} \pi_i^{(2)} BF_i^{(2)} \\
+RBF_r^{(3)}  &= \sum \limits_{i = 1}^{K} \pi_i^{(3)} BF_i^{(3)} \\
+RBF_r^{(4)}  &= \sum \limits_{i = 1}^{K} \sum \limits_{j = 1}^K \pi_i^{(1)} \pi_j^{(2)}  BF_i^{(1)} BF_j^{(2)} I[i \ne j ],\\
+\end{align} 
+\noindent where $I[i \ne j]$ is an indicator that evaluates to 1 if $i$ and $j$ are different and 0 otherwise, $\pi_i^{(2)}$ is the prior probability that SNP $i$ is the causal SNP under model 2, and $\pi_i^{(3)}$ is the prior probability that SNP $i$ is the causal SNP under model 3. For model 4 (where there are two causal SNPs, one of which only influences the first phenotype and one of which only influences the second phenotype), we assume that the prior probabilities that SNP $i$ influences the first or second phenotype are identical to those under model 1 and 2, respectively. In all applications we set $\pi_i^{(1)} = \pi_i^{(2)} = \pi_i^{(3)} = \frac{1}{K}$.
+ 
+\subsubsection{Likelihood}
+We now turn to the model for the whole genome. We denote the full matrix of genotypes in the first study as $\mathbf{G}$ and the full matrix of genotypes in the second study as $\mathbf{H}$. We split the genome into $M$ approximately independent blocks. Under the assumption that all blocks are independent, the probability of all the genotypes is:
+\begin{align}
+P(\mathbf{G}, \mathbf{H} | \vec x, \vec y) &= \prod \limits_{i = 1}^M P(\mathbf{G}_i, \mathbf{H}_i | \vec x, \vec y)\\
+ &=  \prod \limits_{i = 1}^M \bigg[ \sum \limits_{j = 0}^4 \Pi_j P(\mathbf{G}_i, \mathbf{H}_i  | \vec x, \vec y, RM_j) \bigg],
+\end{align} 
+\noindent where $\Pi_j$ is the prior probability of regional model $j$ and $RM_j$ is regional model $j$. These are the probabilities we would like to learn. We can do so by maximizing the log-likelihood:
+
+\begin{equation} \label{loglik}
+l(\theta | \mathbf{G}, \mathbf{H}) = \sum \limits_{i = 1}^M \ln \bigg[ \Pi_0 + \sum \limits_{j = 1}^4 \Pi_j RBF_i^{(j)} \bigg],
+\end{equation}
+
+\noindent where $\theta$ is the set of parameters in the model (the prior probabilities and all of the parameters that go into the construction of the Bayes factors). We maximized this likelihood with the approach described in Section \ref{map}. 
+
+\subsubsection{Bayes factors for overlapping cohorts}
+The above model makes the key assumption that the two phenotypes in question have been measured on two separate sets of individuals. In practice, the cohorts we will use are often overlapping or partially overlapping. This causes two problems for the model. First, if the two phenotypes are correlated, we may overestimate the evidence in favor of regional model 3 (where a single variant influences both phenotypes). Second, the patterns of linkage disequilibrium in the population can no longer be ignored when considering the evidence in favor of regional model 4, and we may overestimate the evidence in favor of this model. In practice, we were most concerned with the first of these; see the Supplementary Material for discussion of the second. 
+
+The degree to which we may overestimate the evidence in favor of regional model 3 depends on the number of overlapping samples in the two studies and the correlation in the phenotypes. We consider the case where there is a single cohort of individuals. Let the vector of genotypes at the SNP be $\vec g$, and let the two vectors of phenotypes be $\vec x$ and $\vec y$. Let the phenotypes be bivariate-normally distributed with mean zero, variance one, and correlation coefficient $C$.
+
+As before, we first want to calculate the Bayes factors measuring the evidence in favor of the three alternative models from Section \ref{snp_bf}. We use a multivariate linear regression model:
+
+\begin{equation}
+ \begin{bmatrix}
+     x_{i}        \\[0.3em]
+       y_{i}     \\[0.3em]
+     \end{bmatrix}
+      = g_i 
+      \begin{bmatrix}
+     \beta_x        \\[0.3em]
+       \beta_y     \\[0.3em]
+     \end{bmatrix}
+     + 
+         \begin{bmatrix}
+    \epsilon_{xi}      \\[0.3em]
+      \epsilon_{yi}   \\[0.3em]
+     \end{bmatrix},
+\end{equation}
+
+\noindent where $\beta_x$ is the effect of the SNP on phenotype $x$,  $\beta_y$ is the effect of the SNP on phenotype $y$, and $\epsilon_{xi}$ and $\epsilon_{yi}$ are error terms that are multivariate normally distributed with mean zero and covariance matrix $\Sigma$ (though in all that follows we assume the effects of any SNP are small, so this residual covariance matrix is approximated by the covariance matrix of the phenotypes). 
+
+To compute the Bayes factors, we use a multivariate extension of the approximate Bayes factor from \citet{Wakefield:2008hc}. Instead of working directly with the phenotype and genotype vectors, we instead consider $\hat \beta_x$ and $\hat \beta_y$, the estimated effect sizes from each individual regression. We also use $V_x$ and $V_y$, the respective variances in the estimates of each regression coefficient, and $Z_x = \frac{\hat \beta_x}{\sqrt{V_x}}$ and  $Z_y = \frac{\hat \beta_y}{\sqrt{V_y}}$. We let:
+
+\begin{equation}
+     \begin{bmatrix}
+    \hat \beta_x        \\[0.3em]
+      \hat \beta_y     \\[0.3em]
+     \end{bmatrix}
+     \sim 
+     MVN \bigg( 
+          \begin{bmatrix}
+     \beta_x        \\[0.3em]
+       \beta_y     \\[0.3em]
+     \end{bmatrix}
+     , 
+        \begin{bmatrix}
+     V_x  & C\sqrt{V_x V_y}  \\[0.3em]
+       C\sqrt{V_x V_y}  & V_y    \\[0.3em]
+     \end{bmatrix}
+ \bigg).
+\end{equation}
+We now place a multivariate normal prior on $\beta_x$ and $\beta_y$. The form we choose is:
+
+\begin{equation}
+    \begin{bmatrix}
+     \beta_x        \\[0.3em]
+      \beta_y     \\[0.3em]
+     \end{bmatrix}
+     \sim 
+     MVN \bigg( 
+          \begin{bmatrix}
+     0       \\[0.3em]
+      0     \\[0.3em]
+     \end{bmatrix}
+     , 
+        \begin{bmatrix}
+     W_x  & C \sqrt{ (V_x+W_x)(V_y+W_y)} - C \sqrt{V_x V_y}     \\[0.3em]
+     C \sqrt{ (V_x+W_x)(V_y+W_y)} - C \sqrt{V_x V_y}     & W_y    \\[0.3em]
+     \end{bmatrix}
+ \bigg).
+\end{equation}
+
+This prior has the somewhat odd property that it depends to a small extent on the variances of the effect size estimates (i.e. on the minor allele frequency of the SNP in question), such that rarer SNPs, or those with a large amount of missing data, have larger prior covariances. The benefit of this prior is that now the posterior predictive distribution of the estimated effect sizes has a simple form:
+
+\begin{equation}
+    \begin{bmatrix}
+    \hat \beta_x        \\[0.3em]
+      \hat \beta_y     \\[0.3em]
+     \end{bmatrix} | H_1
+     \sim 
+     MVN \bigg( 
+          \begin{bmatrix}
+     0       \\[0.3em]
+     0     \\[0.3em]
+     \end{bmatrix}
+     , 
+        \begin{bmatrix}
+     V_x+W_x  & C\sqrt{ (V_x+W_x)(V_y+W_y)}  \\[0.3em]
+       C\sqrt{ (V_x+W_x)(V_y+W_y)}  & V_y+W_y    \\[0.3em]
+     \end{bmatrix}
+ \bigg).
+\end{equation}
+
+The other models are similar. With these assumptions, we can analytically compute the Bayes factors:
+\begin{align}
+BF^{(1)} &\approx \sqrt{(1-r_x)} \exp \bigg[\frac{1}{2(1-C^2)} [ Z_x^2 r_x - 2C Z_x Z_y \big(1-\sqrt{ (1-r_x)} \big)] \bigg] \\
+BF^{(2)} &\approx \sqrt{(1-r_y)} \exp \bigg[\frac{1}{2(1-C^2)} [ Z_y^2 r_y - 2C Z_x Z_y \big(1-\sqrt{ (1-r_y)} \big)] \bigg] \\
+BF^{(3)} &\approx \sqrt{(1-r_x)(1-r_y)} \exp \bigg[\frac{1}{2(1-C^2)} [ Z_x^2 r_x +Z_y^2 r_y- 2C Z_x Z_y \big(1-\sqrt{ (1-r_x)(1-r_y)} \big)] \bigg],
+\end{align}
+\noindent where $r_x = \frac{W_x}{V_x+W_x}$ and $r_y = \frac{W_y}{V_y+W_y}$. Note that if the two phenotypes are uncorrelated all three Bayes factors are identical to those in Section \ref{snp_bf}. A comparison of these Bayes factors to those of \citet{Stephens:2013fk} is presented in the Supplementary Material.
+
+For all of the pairwise GWAS, we used these Bayes factors instead of those in Section \ref{snp_bf}. We used $C$ estimated from the summary statistics, as described in Section \ref{cor}. 
+
+\subsubsection{Fitting the model}\label{map}
+The natural approach to fitting this model would be to maximize the log-likelihood in Equation \ref{loglik}. However, in a small subset of cases (generally in pairs of GWAS with small numbers of associated variants), we found that this maximization was numerically unstable. To fix this, we placed a weak logistic normal prior on the $\Pi$ parameters. Specifically, we define hyperparameters:
+
+\begin{align}
+\alpha_0 &\sim N(0, 9) \\
+\alpha_1 &\sim N(-2, 9)\\
+\alpha_2 &\sim N(-2, 9)\\
+\alpha_3 &\sim N(-2, 9)\\
+\alpha_4 &\sim N(-2, 9)\\
+\end{align}
+
+\noindent and then define:
+
+\begin{equation} 
+\Pi_i = \frac{e^{\alpha_i}}{\sum_j e^{\alpha_j}}.
+\end{equation}
+
+Instead of maximizing the likelihood, we maximized the function:
+
+\begin{equation}
+f(\theta) = l(\theta) + g(\theta),
+\end{equation}
+where $\theta$ is the set of five $\alpha$ parameters, $l(\theta)$ is the log-likelihood from Equation \ref{loglik} and $g(\theta)$ is the log of the prior density described above. We maximized this function using the Nelder-Mead algorithm implemented in the GNU Scientific Library. The estimates of the parameters are maximum \emph{a posteriori} estimates rather than maximum likelihood estimates. In practice, this serves to prevent estimates of the $\Pi$ parameters from going all the way to zero. 
+
+
+\subsection{More robust ``Mendelian randomization"}
+The observation that a genetic variant influences two traits can be interpreted in the ``Mendelian randomization" framework as evidence that one trait causally influences the other. However, using this framework requires the strong assumption that the variant does not influence the two traits via independent mechanisms. 
+
+Our goal was to develop a robust method for measuring the evidence in favor of a causal relationship between two traits using data from many genetic associations, while recognizing that strong conclusions are likely impossible in this setting. Our aim was not to estimate the magnitude of a causal effect (should one exist), but rather to simply determine if such an effect exists. 
+
+Our motivating example comes from LDL cholesterol and heart disease risk--if we identify variants that influence LDL levels, these variants have correlated effects on heart disease risk (Figure \ref{f_causal}). However, if we identify genetic variants that influence heart disease, these variants do not have correlated effects on LDL levels (Figure \ref{f_causal}). The intuition is as follows: if a trait $X$ causally influences trait $Y$, then to a first approximation every genetic variant that influences trait $X$ should also influence trait $Y$, and the effect sizes of these variants on the two traits should be correlated. The reverse, however, is not true: genetic variants that influence trait $Y$ do not necessarily influence trait $X$, since $Y$ can be influenced by mechanisms independent of $X$. (Assume that $X$ is one of a large number of factors that causally influence $Y$, such that most of the variants that influence $Y$ do not act through $X$).
+
+To scan through all pairs of traits, we aimed to formulate this intuition in a manner that allows for automation. Related work has been done on Mendelian randomization with multiple genetic variants \citep{Do:2013aa, Evans:2013aa, Davey-Smith:2014aa} and ``reciprocal" Mendelian randomization \citep{Timpson:2011aa}. We assume we have identified a set of $N_X$ genetic variants that influence $X$ (without using information about $Y$). Assume we have also identified a set of $N_Y$ genetic variants that influence $Y$ (without using information about $X$). Let $\vec \beta_{XX}$ be the vector of effect sizes on trait $X$ for the set of variants ascertained through the association study of $X$, and  $\vec \beta_{XY}$ be the vector of the effect sizes of these variants on trait $Y$. Define $\vec \beta_{YY}$ and $\vec \beta_{YX}$ analogously. Now let $\hat \rho_X$ be the rank correlation between $\vec \beta_{XX}$ and $\vec \beta_{XY}$,  and let $\hat \rho_Y$ be the rank correlation between $\vec \beta_{YY}$ and $\vec \beta_{YX}$. Using Fisher's Z-transformation, we can approximate the sampling distributions of  $\hat \rho_X$ and $\hat \rho_Y$. If we let $\hat Z_X = \atanh(\hat \rho_X)$:
+
+\begin{align}
+\hat Z_X &\sim N \bigg(Z_X, \frac{1}{N_X - 3} \bigg)\\
+\hat Z_Y &\sim N \bigg(Z_Y, \frac{1}{N_ Y- 3} \bigg).
+\end{align}
+
+We can thus define an approximate likelihood for the two correlation coefficients:
+
+\begin{equation}
+L( Z_X, Z_Y; \hat Z_X, \hat Z_Y, N_X, N_Y) = N \bigg( \hat Z_X; Z_X,  \frac{1}{N_X - 3} \bigg) N \bigg( \hat Z_Y; Z_Y,  \frac{1}{N_Y - 3} \bigg),
+\end{equation}
+\noindent where $N(x; \mu, \sigma^2)$ is the density of a normal distribution with mean $\mu$ and variance $\sigma^2$ evaluated at $x$. 
+
+Now we define the models we would like to compare:
+
+\begin{enumerate}
+\item M1: if trait $X$ causes $Y$, then we estimate $Z_X$ and set $Z_Y = 0$.
+\item M2: If trait $Y$ causes $X$, then we estimate $Z_Y$ and set $Z_X = 0$.
+\item M3: If there are no relationships between the traits, then $Z_X = Z_Y = 0$.
+\item M4: If the correlation does not depend on how the variants were ascertained, $Z_X = Z_Y$.
+\end{enumerate}
+The first two models on this list we think of as causal models, by the line of reasoning outlined at the beginning of this section. The third model we obviously interpret as a non-causal model. The fourth we also interpret as non-causal, though this perhaps merits some discussion (see below). We fit each model by maximizing the corresponding approximate likelihood. 
+
+To compare the models, we calculate the Akaike information criterion (AIC) for each, where the numbers of parameters is 1, 1, 0, and 1, respectively, for the four models above. We then choose the smallest AIC from the two causal models ($AIC_{causal}$) and the smallest AIC from the two non-causal models ($AIC_{noncausal}$). We then calculate the relative likelihood of these two models:
+
+\begin{equation}
+r = \exp \bigg(\frac{AIC_{causal} - AIC_{noncausal}}{2} \bigg).
+\end{equation}
+This is the relative likelihood of the best non-causal model compared to the best causal model. In Figure \ref{f_causal}, we show the four pairs of traits where this ratio is less than 0.01, and in Supplementary Figure 12, we show 10 additional pairs of traits where this ratio is less than 0.05. As we can see visually, this model successfully identifies patterns that look similar to our motivating example of LDL and heart disease.
+
+A key caveat in interpretation of this method is that we may not have measured the truly causal phenotype, but rather some proxy for it. For example, if it is not BMI \emph{per se} that causally influences risk of type 2 diabetes, but rather some other measure of adiposity that is highly correlated to BMI (and shares the same underlying genetic basis), then we have no way of detecting this. We suspect that more detailed phenotyping will identify ``clusters" of highly correlated traits that will be difficult to disentangle.  
+
+\paragraph{Implications of looking explicitly for asymmetry.}
+
+We have set up this model in the context where a causal trait is one of many factors that influences a downstream trait. This induces the asymmetry we try to detect. However, it is possible that the ``causal" trait is the \emph{major} factor that influences the ``caused" trait. For example, consider type 2 diabetes and fasting glucose levels. Clearly any factor that increases fasting glucose increases risk of type 2 diabetes, just by virtue of the definition of the disease. This type of causal relationship will be missed by this approach. On the other hand, consider the two measures of bone mineral density. Any factor that increases one will also almost certainly increase the other, because the two phenotypes are closely related at a molecular level. We would not consider this a causal relationship between the traits, but rather that the two traits are measurements of a single underlying variable (namely overall bone density). We prefer to miss causal relationships of the first kind in order to avoid the interpretive difficulties of the second case.
+\section{Acknowledgements}
+This work was supported in part by the National Human Genome Research Institute of the National Institutes of Health (grant number R44HG006981 to 23andMe). We would like to thank the customers of 23andMe for making this work possible. We would like to thank the GWAS consortia that made summary statistics available to us, Luke Jostins for providing updated summary statistics from the Crohn's disease GWAS, and Graham Coop for helpful discussions.
+
+\bibliography{../../Bib/bib}
+\end{document}
