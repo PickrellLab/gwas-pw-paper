@@ -10,7 +10,7 @@ rownames(toplot) = s
 
 for (i in 1:(length(s)-1)){
 	for(j in (i+1):length(s)){
-		tmp = paste("/nethome/jkpickrell/gwas_data/overlaps/", s[i], "_", s[j], ".overlap_wbetas", sep = "")
+		tmp = paste("../../overlaps/data/", s[i], "_", s[j], ".overlap_wbetas", sep = "")
 		tmp = read.table(tmp, as.is = T, head = T)
 		mhc =which(tmp$chr == "chr6" & tmp$pos >= 26000000 & tmp$pos <=34000000)
 
@@ -33,7 +33,7 @@ for (i in 1:(length(s)-1)){
 		print(paste(s[i], s[j], p, rho, Z, cor(b1, b2)))
 		toplot[i,j] = Z
 
-		tmp = paste("/nethome/jkpickrell/gwas_data/overlaps/", s[j], "_", s[i], ".overlap_wbetas", sep = "")
+		tmp = paste("../../overlaps/data/", s[j], "_", s[i], ".overlap_wbetas", sep = "")
                 tmp = read.table(tmp, as.is = T, head = T)
                 mhc =which(tmp$chr == "chr6" & tmp$pos >= 26000000 & tmp$pos <=34000000)
 
