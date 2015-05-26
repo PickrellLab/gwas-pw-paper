@@ -388,7 +388,7 @@ BF^{(1)}  &= WABF_1 \\
 BF^{(2)}  &= WABF_2 \\
 BF^{(3)}  &= WABF_1 WABF_2,
 \end{align}
-\noindent where $BF^{(3)}$ is a consequence of the fact that the two cohorts are independent. 
+\noindent where $BF^{(3)}$ is a consequence of the fact that the two cohorts are independent. This latter Bayes factor is equivalent to that derived under the ``maximum heterogeneity" model in \citet{wen2014bayesian}. 
 
 We note that in the Wakefield approximate Bayes factor the effect size of a SNP enters only through the Z-score. As a consequence, if we consider the ``reverse" regression model where we swap the genotypes and phenotypes:
 
@@ -524,9 +524,9 @@ BF^{(1)} &\approx \sqrt{(1-r_x)} \exp \bigg[\frac{1}{2(1-C^2)} [ Z_x^2 r_x - 2C 
 BF^{(2)} &\approx \sqrt{(1-r_y)} \exp \bigg[\frac{1}{2(1-C^2)} [ Z_y^2 r_y - 2C Z_x Z_y \big(1-\sqrt{ (1-r_y)} \big)] \bigg] \\
 BF^{(3)} &\approx \sqrt{(1-r_x)(1-r_y)} \exp \bigg[\frac{1}{2(1-C^2)} [ Z_x^2 r_x +Z_y^2 r_y- 2C Z_x Z_y \big(1-\sqrt{ (1-r_x)(1-r_y)} \big)] \bigg],
 \end{align}
-\noindent where $r_x = \frac{W_x}{V_x+W_x}$ and $r_y = \frac{W_y}{V_y+W_y}$. Note that if the two phenotypes are uncorrelated all three Bayes factors are identical to those in Section \ref{snp_bf}. A comparison of these Bayes factors to those of \citet{Stephens:2013fk} is presented in the Supplementary Material.
+\noindent where $r_x = \frac{W_x}{V_x+W_x}$ and $r_y = \frac{W_y}{V_y+W_y}$. Note that if the two phenotypes are uncorrelated all three Bayes factors are identical to those in Section \ref{snp_bf}. 
 
-For all of the pairwise GWAS, we used these Bayes factors instead of those in Section \ref{snp_bf}. We used $C$ estimated from the summary statistics, as described in Section \ref{cor}. 
+For all of the pairwise GWAS, we used these Bayes factors instead of those in Section \ref{snp_bf}. We used $C$ estimated from the summary statistics, as described in Section \ref{cor}. Note that when the cohorts are only partially overlapping, the $C$ we calculate is a function of the amount of overlap between the cohorts as well as the correlation in the phenotypes. In principle some knowledge of the true correlation between two phenotypes could be obtained from external data and incorporated into the prior here, but we have chosen not to do this, and so as the overlap in the cohorts goes to zero, these Bayes factors tend to the prior assumption that the two phenotypes are uncorrelated (i.e. the maximum heterogeneity Bayes factor from  \citet{wen2014bayesian}). This has no justification from a modeling perspective, and so may be suboptimal in situations where good external information is available.
 
 \subsubsection{Fitting the model}\label{map}
 The natural approach to fitting this model would be to maximize the log-likelihood in Equation \ref{loglik}. However, in a small subset of cases (generally in pairs of GWAS with small numbers of associated variants), we found that this maximization was numerically unstable. To fix this, we placed a weak logistic normal prior on the $\Pi$ parameters. Specifically, we define hyperparameters:
@@ -536,7 +536,7 @@ The natural approach to fitting this model would be to maximize the log-likeliho
 \alpha_1 &\sim N(-2, 9)\\
 \alpha_2 &\sim N(-2, 9)\\
 \alpha_3 &\sim N(-2, 9)\\
-\alpha_4 &\sim N(-2, 9)\\
+\alpha_4 &\sim N(-2, 9)
 \end{align}
 
 \noindent and then define:
@@ -597,7 +597,7 @@ A key caveat in interpretation of this method is that we may not have measured t
 
 We have set up this model in the context where a causal trait is one of many factors that influences a downstream trait. This induces the asymmetry we try to detect. However, it is possible that the ``causal" trait is the \emph{major} factor that influences the ``caused" trait. For example, consider type 2 diabetes and fasting glucose levels. Clearly any factor that increases fasting glucose increases risk of type 2 diabetes, just by virtue of the definition of the disease. This type of causal relationship will be missed by this approach. On the other hand, consider the two measures of bone mineral density. Any factor that increases one will also almost certainly increase the other, because the two phenotypes are closely related at a molecular level. We would not consider this a causal relationship between the traits, but rather that the two traits are measurements of a single underlying variable (namely overall bone density). We prefer to miss causal relationships of the first kind in order to avoid the interpretive difficulties of the second case.
 \section{Acknowledgements}
-This work was supported in part by the National Human Genome Research Institute of the National Institutes of Health (grant number R44HG006981 to 23andMe). We would like to thank the customers of 23andMe for making this work possible. We would like to thank the GWAS consortia that made summary statistics available to us, Luke Jostins for providing updated summary statistics from the Crohn's disease GWAS, and Graham Coop for helpful discussions.
+This work was supported in part by the National Human Genome Research Institute of the National Institutes of Health (grant number R44HG006981 to 23andMe) and the National Institute of Mental Health (grant number R01MH106842 to JKP). We would like to thank the customers of 23andMe for making this work possible, the GWAS consortia that made summary statistics available to us, Luke Jostins for providing updated summary statistics from the Crohn's disease GWAS, and Graham Coop and Matthew Stephens for helpful discussions.
 
 \bibliography{bib}
 \end{document}
