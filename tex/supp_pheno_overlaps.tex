@@ -59,10 +59,10 @@
 \begin{document}
 \title{Supplementary Information for: Detection and interpretation of shared genetic influences on 40 human traits}
 \author{Joseph K. Pickrell$^{1,2, \dagger}$, Tomaz Berisa${^1}$, Laure Segurel$^{3}$, Joyce Y. Tung${^4}$, David Hinds${^4}$\\ \\
-\small $^1$ New York Genome Center, New York, NY\\
-\small $^2$ Department of Biological Sciences, Columbia University, New York, NY \\
-\small $^3$ CNRS \\
-\small $^4$ 23andMe, Inc. \\
+\small $^1$ New York Genome Center, New York, NY, USA\\
+\small $^2$ Department of Biological Sciences, Columbia University, New York, NY, USA \\
+\small $^3$ CNRS, Paris, France \\
+\small $^4$ 23andMe, Inc., Mountain View, CA, USA\\
 \small $^\dagger$ Correspondence to: \url{jkpickrell@nygenome.org}
 }
 \maketitle
@@ -258,7 +258,7 @@ Var(\hat \beta_1^{\prime}) &= Var( \hat \beta_1 - R \hat \beta_2)\\
 If we assume that there is no error in our estimate of $R$, this reduces to:
 
 \begin{align}
-Var(\hat \beta_1^{\prime}) &= Var(\hat \beta_1) - R^2 Var( \hat \beta_2),
+Var(\hat \beta_1^{\prime}) \approx Var(\hat \beta_1) - R^2 Var( \hat \beta_2),
 \end{align}
 
 \noindent which is equivalent to Equation 20 from \citet{Yang:2012uq} (assuming effect sizes are small, such that the residual variance is equivalent to the phenotypic variance). We can then define $Z^{\prime} = \frac{\hat \beta_1^{\prime}}{\sqrt{ Var(\hat \beta_1^{\prime})}}$ and use any of the approximate Bayes factors as defined previously. 
