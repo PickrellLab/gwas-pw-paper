@@ -4,6 +4,27 @@ d = read.table("all_bffiles", as.is = T)
 npheno = nrow(d)
 npair = npheno*(npheno-1)/2
 
+
+jackknife_fisherZ_se = function(d){
+	leftout = vector(length = nrow(d))
+	cc = cor.test(d$B1, d$B2, method = "sp")
+	cc = cc$estimate
+	for (i in 1:nrow(d)){
+		tmp = d[-i,]
+		tmp$R1 = rank(tmp$B1)
+		tmp$R2 = rank(tmp$B2)
+		c = cor.test(tmp$R1, tmp$R2)
+		e = c$estimate
+                z = 0.5*log ( (1+e)/(1-e))
+		leftout[i] = z
+	}
+	m = mean(leftout)
+	v = sum( (leftout -m)^2)
+	v = v*( (nrow(d)-1) / nrow(d))
+	se = sqrt(v)
+	return(list (mean = m, se = se, rho = cc)) 
+}
+
 toreturn = data.frame(matrix(nrow = npair, ncol = 10))
 index = 1
 for (i in 1:(npheno-1)){
@@ -23,13 +44,16 @@ for (i in 1:(npheno-1)){
 		}
 		tmp$B1 = tmp$Z_1*sqrt(tmp$V_1)
 		tmp$B2 = tmp$Z*sqrt(tmp$V)
-		tmp$R1 = rank(tmp$B1)
-		tmp$R2 = rank(tmp$B2)
+		fZse1 = jackknife_fisherZ_se(tmp)
+		#tmp$R1 = rank(tmp$B1)
+		#tmp$R2 = rank(tmp$B2)
 		N1 = nrow(tmp)
-		c1 = cor.test(tmp$R1, tmp$R2)
-		e1 = c1$estimate
-		z1 = 0.5*log ( (1+e1)/(1-e1))
-		se1 = 1/( sqrt(nrow(tmp)-3))
+		#c1 = cor.test(tmp$R1, tmp$R2)
+		e1 = fZse1$rho
+		z1 = fZse1$mean
+		se1 = fZse1$se
+		#z1 = 0.5*log ( (1+e1)/(1-e1))
+		#se1 = 1/( sqrt(nrow(tmp)-3))
 
 
                 f2 = paste0("../../overlaps/data/", p2, "_", p1, ".overlap_wbetas")
@@ -42,13 +66,16 @@ for (i in 1:(npheno-1)){
                 }
                 tmp$B1 = tmp$Z_1*sqrt(tmp$V_1)
                 tmp$B2 = tmp$Z*sqrt(tmp$V)
-                tmp$R1 = rank(tmp$B1)
-                tmp$R2 = rank(tmp$B2)
+		fZse2 = jackknife_fisherZ_se(tmp)
+                #tmp$R1 = rank(tmp$B1)
+                #tmp$R2 = rank(tmp$B2)
 		N2 = nrow(tmp)
-                c2 = cor.test(tmp$R1, tmp$R2)
-                e2 = c2$estimate
-                z2 = 0.5*log ( (1+e2)/(1-e2))
-                se2 = 1/( sqrt(nrow(tmp)-3))	
+                #c2 = cor.test(tmp$R1, tmp$R2)
+                e2 = fZse2$rho
+		z2 = fZse2$mean
+                se2 = fZse2$se
+                #z2 = 0.5*log ( (1+e2)/(1-e2))
+                #se2 = 1/( sqrt(nrow(tmp)-3))	
 		toreturn[index,3]= N1
 		toreturn[index,4] = N2
 		toreturn[index,5] = e1
