@@ -55,7 +55,7 @@ tmp = d[d$B2 > 0.2,]
 points(tmp$B1, tmp$B2, pch = 20, col = "red")
 text(tmp$B1+0.01, tmp$B2, adj = 0, lab = paste(tmp[1,]$id, "(near TCF7L2)"), cex = 0.6, col = "red")
 
-mtext("A. BMI v. T2D (expanded BMI set)", adj = 0, cex = 1)
+mtext("B. BMI v. T2D (expanded BMI set)", adj = 0, cex = 1)
 lines(c(-10, 10), c(0,0), col = "grey")
 lines(c(0,0), c(-10,10), col = "grey")
 

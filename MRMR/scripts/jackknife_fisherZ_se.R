@@ -12,7 +12,7 @@ jackknife_fisherZ_se = function(d){
                 z = 0.5*log ( (1+e)/(1-e))
                 leftout[i] = z
         }
-	print(leftout)
+#	print(leftout)
         m = mean(leftout)
         v = sum( (leftout -m)^2)
         v = v*( (nrow(d)-1) / nrow(d))
