@@ -1,10 +1,11 @@
-
 source("jackknife_fisherZ_se.R")
+
 d = read.table("all_bffiles", as.is = T)
 npheno = nrow(d)
 npair = npheno*(npheno-1)/2
 
-toreturn = data.frame(matrix(nrow = npair, ncol = 10))
+
+toreturn = data.frame(matrix(nrow = npair, ncol = 12))
 index = 1
 for (i in 1:(npheno-1)){
 	p1 = d[i,1]
@@ -32,7 +33,7 @@ for (i in 1:(npheno-1)){
 		z1 = fZse1$mean
 		se1 = fZse1$se
 		#z1 = 0.5*log ( (1+e1)/(1-e1))
-		#se1 = 1/( sqrt(nrow(tmp)-3))
+		fisherse1 = 1/( sqrt(nrow(tmp)-3))
 
 
                 f2 = paste0("../../overlaps/data/", p2, "_", p1, ".overlap_wbetas")
@@ -54,7 +55,7 @@ for (i in 1:(npheno-1)){
 		z2 = fZse2$mean
                 se2 = fZse2$se
                 #z2 = 0.5*log ( (1+e2)/(1-e2))
-                #se2 = 1/( sqrt(nrow(tmp)-3))	
+                fisherse2 = 1/( sqrt(nrow(tmp)-3))	
 		toreturn[index,3]= N1
 		toreturn[index,4] = N2
 		toreturn[index,5] = e1
@@ -63,11 +64,13 @@ for (i in 1:(npheno-1)){
 		toreturn[index,8] = z2
 		toreturn[index,9] = se1
 		toreturn[index,10] = se2
+		toreturn[index,11] = fisherse1
+		toreturn[index,12] = fisherse2
 		index = index+1
 	}
 }
 
-names(toreturn) = c("P1", "P2", "N1", "N2", "RHO1", "RHO2", "FZ1", "FZ2", "SE1", "SE2")
+names(toreturn) = c("P1", "P2", "N1", "N2", "RHO1", "RHO2", "FZ1", "FZ2", "SE1", "SE2", "FISHERSE1", "FISHERSE2")
 toreturn = toreturn[!is.na(toreturn[,5]),]
 toreturn = toreturn[!is.na(toreturn[,6]),]
 toreturn = toreturn[!is.na(toreturn[,7]),]
@@ -76,7 +79,7 @@ toreturn = toreturn[!is.na(toreturn[,9]),]
 toreturn = toreturn[is.finite(toreturn$FZ2) & is.finite(toreturn$FZ1),]
 
 
-write.table(toreturn, file = "all_rho", quote = F, row.names = F)
+write.table(toreturn, file = "all_compare_se", quote = F, row.names = F)
  
 
 
