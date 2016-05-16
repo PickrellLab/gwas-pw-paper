@@ -39,3 +39,5 @@ TC	all_freeze_12_21_2014/TC.top00.fourier.avgbf.bfs.gz	all_freeze_12_21_2014/TC.
 TG	all_freeze_12_21_2014/TG.top00.fourier.avgbf.bfs.gz	all_freeze_12_21_2014/TG.top00.fourier.avgbf.segbfs.gz
 TS_23	all_freeze_12_21_2014/TS.23.top00.fourier.bfs.gz	all_freeze_12_21_2014/TS.23.top00.fourier.segbfs.gz
 UB_23	all_freeze_12_21_2014/UB.23.top00.fourier.bfs.gz	all_freeze_12_21_2014/UB.23.top00.fourier.segbfs.gz
+UC	all_freeze_12_21_2014/UC.top00.fourier.avgbf.bfs.gz	all_freeze_12_21_2014/UC.top00.fourier.avgbf.segbfs.gz
+EDU	all_freeze_12_21_2014/EDU.top00.fourier.avgbf.bfs.gz	all_freeze_12_21_2014/EDU.top00.fourier.avgbf.segbfs.gz

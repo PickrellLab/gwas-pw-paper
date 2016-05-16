@@ -69,7 +69,7 @@ l[1,2] = 2
 l[2,2] = 3
 layout(l, widths = c(10,1))
 
-orders = c("AVD_23", "AAM", "AAM_23",  "CAD", "TG", "HDL", "TC", "LDL", "HB", "MCV", "RBC", "MCHC", "MPV", "PLT", "FNBMD", "LSBMD", "TS_23", "CEI_23", "ALL_23", "ATH_23", "HTHY_23", "CD","RA", "T2D", "FG", "BMI_2015", "CUP_23", "WHR", "MPB_23", "UB_23", "DIMP_23", "NOSE_23", "HEIGHT", "BHM_23", "NST_23", "AD", "MIGR_23", "PS_23", "SCZ", "PD_23")
+orders = c("AVD_23", "AAM", "AAM_23", "PCV", "HB", "MCHC", "RBC", "MCV", "MPV", "PLT", "LSBMD", "FNBMD", "TS_23", "CEI_23", "HTHY_23", "RA", "ATH_23", "ALL_23", "CD","UC", "CAD", "TG", "HDL", "TC", "LDL","T2D", "FG", "BMI_2015", "CUP_23", "WHR", "NOSE_23", "DIMP_23", "UB_23", "MPB_23", "HEIGHT", "BHM_23", "NST_23", "AD", "MIGR_23", "PS_23", "EDU", "SCZ", "PD_23")
 
 plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = F, xlab = "", ylab = "")
 mtext("Effect size correlations across all pairs of traits", adj = 0)

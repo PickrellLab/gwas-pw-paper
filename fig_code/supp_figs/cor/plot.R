@@ -1,6 +1,7 @@
 
-d = read.table("all_pw_wcov_freeze_0228",as.is = T)
+d = read.table("all_pw_wcov_freeze_082515",as.is = T)
 
+d = d[order(d[,3]),]
 d[,4] = 1:nrow(d)
 
 pdf("cor.pdf")

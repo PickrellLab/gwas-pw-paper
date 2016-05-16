@@ -76,6 +76,7 @@ toplot[,4] = toplot[,2]*sqrt(toplot[,3])
 
 toplot = toplot[!is.na(toplot[,2]),]
 
+toplot[toplot[,1] == "BMI_2015",1] = "BMI"
 toplot[toplot[,1] == "SCZ_2014",1] = "SCZ"
 toplot[toplot[,1] == "HEIGHT_2014",1] = "HEIGHT"
 toplot[toplot[,1] == "CD_NEW_062314",1] = "CD"

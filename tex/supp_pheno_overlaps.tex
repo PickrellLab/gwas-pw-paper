@@ -16,7 +16,7 @@
 \usepackage{setspace}
 \usepackage[table]{xcolor}
 %\bibliographystyle{elsart-harv}
-
+\usepackage[final]{pdfpages}
 %\bibliographystyle{JRSS}
 \bibliographystyle{genres}
 %\usepackage[margin=1in]{geometry}
@@ -57,11 +57,11 @@
 
 
 \begin{document}
-\title{Supplementary Information for: Detection and interpretation of shared genetic influences on 40 human traits}
-\author{Joseph K. Pickrell$^{1,2, \dagger}$, Tomaz Berisa${^1}$, Laure Segurel$^{3}$, Joyce Y. Tung${^4}$, David Hinds${^4}$\\ \\
+\title{Supplementary Information for: Detection and interpretation of shared genetic influences on 42 human traits}
+\author{Joseph K. Pickrell$^{1,2, \dagger}$, Tomaz Berisa${^1}$, Jimmy Z. Liu${^1}$, Laure Segurel$^{3}$, Joyce Y. Tung${^4}$, David Hinds${^4}$\\ \\
 \small $^1$ New York Genome Center, New York, NY, USA\\
 \small $^2$ Department of Biological Sciences, Columbia University, New York, NY, USA \\
-\small $^3$ CNRS, Paris, France \\
+\small $^3$ UMR7206 Eco-anthropologie et ethnobiologie, CNRS-MNHN-Paris 7, Paris, France\\
 \small $^4$ 23andMe, Inc., Mountain View, CA, USA\\
 \small $^\dagger$ Correspondence to: \url{jkpickrell@nygenome.org}
 }
@@ -84,6 +84,12 @@ The CARDIoGRAM GWAS data described in \citet{Schunkert:2011aa} was downloaded fr
 
 \subsection{Crohn's disease}
 We obtained updated versions of the summary statistics from the GWAS described in \citet{jostins2012host} from \url{http://www.broadinstitute.org/~sripke/share_links/KMaiXtod0Alvozgg5oJgl3QK7VVH2N_IBD_0711a/}, and processed them as described previously \citep{pickrell2013joint}.  After imputation, we had 6,065,937 summary statistics.
+
+\subsection{Ulcerative colitis}
+We obtained updated versions of the summary statistics from the GWAS described in \citet{jostins2012host} from \url{http://www.broadinstitute.org/~sripke/share_links/KMaiXtod0Alvozgg5oJgl3QK7VVH2N_IBD_0711a/}, and processed them as described previously \citep{pickrell2013joint}.  After imputation, we had 6,067,283 summary statistics.
+
+\subsection{Educational attainment}
+Summary statistics from the GWAS described in \citet{okbay} were kindly provided by the Social Science Genetic Association Consortium and 23andMe. The data consist of summary statistics at 9,256,491 variants. 
 
 \subsection{Type 2 diabetes}
 The DIAGRAM consortium summary statistics described in \citep{Morris:2012aa} were downloaded from \url{http://diagram-consortium.org/downloads.html}. We removed SNPs typed on less than 9,000 cases or 50,000 controls, then imputed summary statistics for all variants in the 1000 Genomes Phase 1 release. After imputation, we had 5,824,487 summary statistics. To approximate the variance in the effect size estimates we used the allele frequencies from the European-descent individuals in the 1000 Genomes Project. 
@@ -114,55 +120,6 @@ Summary statistics from \url{http://plaza.umin.ac.jp/~yokada/datasource/files/GW
 GWAS for a number of traits were performed by the personal genomics company 23andMe using a survey design \citep{Eriksson:2010aa}. Some of these GWAS have been partially described previously \citep{Eriksson:2012ab, Eriksson:2012aa, Eriksson:2010aa, Do:2011aa, Kiefer:2013aa}. Details of each GWAS are described in separate Supplementary Notes.
 
 We used filters and summary data described in these Supplementary Notes, with two exceptions: for both allergies and Parkinson's disease, we used more stringent thresholds for genotyping batch effects. Specifically, 23andMe reports a P-value for whether the allele frequencies of each SNP are associated to genotyping batch or to imputation batch. We used P-value thresholds of $P = 1\times 10^{-7}$ and $1\times10^{-6}$, respectively, for these two studies. This more stringent cutoff was used to account for an imbalance in the enrollment of cases versus controls over time in these two studies. Some small residual batch effect likely explains the small correlation in effect sizes between Parkinson's disease and allergies in Figure 4 in the main text.
-
-%\subsubsection{Age at menarche}
-%\includepdf[pages=1-5]{23andMe_phenos/AAM.pdf}
-
-%\subsubsection{Age at voice drop}
-%\includepdf[pages=1-4]{23andMe_phenos/AVD.pdf}
-
-%\subsubsection{Allergies}
-%\includepdf[pages=-]{23andMe_phenos/ALL.pdf}
-%\subsubsection{Asthma}
-%\includepdf[pages=-]{23andMe_phenos/ATH.pdf}
-%\subsubsection{Beighton hypermobility}
-%\includepdf[pages=-]{23andMe_phenos/BHM.pdf}
-
-%\subsubsection{Childhood ear infections}
-%\includepdf[pages=-]{23andMe_phenos/CEI.pdf}
-
-%\subsubsection{Breast size}
-%\includepdf[pages=-]{23andMe_phenos/CUP.pdf}
-%\subsubsection{Chin dimples}
-%\includepdf[pages=-]{23andMe_phenos/DIMP.pdf}
-%\subsubsection{Hypothyroidism}
-%\includepdf[pages=-]{23andMe_phenos/HTHY.pdf}
-
-%\subsubsection{Migraine}
-%\includepdf[pages=-]{23andMe_phenos/MIGR.pdf}
-
-%\subsubsection{Male pattern baldness}
-%\includepdf[pages=-]{23andMe_phenos/MPB.pdf}
-
-%\subsubsection{Nose size}
-%\includepdf[pages=-]{23andMe_phenos/NOSE.pdf}
-
-%\subsubsection{Nearsightedness}
-%\includepdf[pages=-]{23andMe_phenos/NST.pdf}
-
-%\subsubsection{Parkinson's disease}
-%\includepdf[pages=-]{23andMe_phenos/PD.pdf}
-
-%\subsubsection{Photic sneeze reflex}
-%\includepdf[pages=-]{23andMe_phenos/PS.pdf}
-
-%\subsubsection{Tonsillectomy}
-%\includepdf[pages=-]{23andMe_phenos/TS.pdf}
-
-%\subsubsection{Unibrow}
-%\includepdf[pages=-]{23andMe_phenos/UB.pdf}
-
-
 \section{Additional details about the hierarchical model}
 We ran the hierarchical model as described in the main text on all pairs of phenotypes. In this section we describe simulations and additional complications that we did not account for in the main analyses.
 
@@ -370,12 +327,37 @@ We applied this method to several genome-wide association studies that we know w
 \begin{figure}
 \begin{center}
 \includegraphics[scale = 0.6]{figs/APOE_region.pdf}
-\caption{. \textbf{APOE region. A. Regional association signals.} Shown are the P-values for association in the region for Alzheimer's disease and nearsightedness. In red is the SNP rs6857, which tags the APOE4 allele. \textbf{B. Effect of rs6857 on all phenotypes.} Shown are the effects of the T allele on all phenotypes where this variant was successfully genotypes or imputed. Bars represent 95\% confidence intervals. For ease of display we do not show is the effect size on Alzheimer's disease, which is 1.2 (on a log-odds scale)}\label{f_apoe}
+\caption{. \textbf{APOE region. A. Regional association signals.} Shown are the P-values for association in the region for Alzheimer's disease and nearsightedness. In red is the SNP rs6857, which tags the APOE4 allele. \textbf{B. Effect of rs6857 on all phenotypes.} Shown are the effects of the T allele on all phenotypes where this variant was successfully genotypes or imputed. Bars represent 95\% confidence intervals. For ease of display we do not show is the effect size on Alzheimer's disease, which is 1.2 (on a log-odds scale).}\label{f_apoe}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.6]{figs/FTO_region.pdf}
+\caption{. \textbf{FTO region. A. Regional association signals.} Shown are the P-values for association in the region for age at menarche and breast size. In red is the SNP rs1421085. \textbf{B. Effect of rs1421085 on all phenotypes.} Shown are the effects of the C allele on all phenotypes where this variant was successfully genotypes or imputed. Bars represent 95\% confidence intervals.}\label{f_apoe}
 \end{center}
 \end{figure}
 
 
-\section{Expanded analysis of putative causally-related traits}
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.6]{figs/heatmap_0_005_rg.pdf}
+\caption{. \textbf{Heatmap of genetic correlations}. Each square $[i,j]$ shows the estimate of the genetic correlation between traits $i$ and $j$, using the method from  \citet{bulik2015atlas}. Note that this is symmetric. Darker colors represent stronger genetic correlations. Colors are shown for all pairs of traits where the genetic correlation is ``significant" at a P-value threshold of 0.005.}\label{f_rg}
+\end{center}
+\end{figure}
+
+\section{Causal inference}
+This section contains additional details about the ``more robust Mendelian randomization" analyses.
+\subsection{Simulations}
+In the main text, we describe a heuristic method for identifying potential causal relationships between traits, using a test statistic of a relative approximate likelihood. To test the behavior of this statistic, we performed simulations. Each simulation was set up as follows: we simulate two sets of bivariate normally distributed points, then use the procedure in the main text to detect an asymmetry in the Spearman correlation coefficients in the two sets. Note that this does not simulate all aspects of a genetic association study, rather just the estimated effect sizes. 
+
+\paragraph{Simulations under the null.}
+To test the distribution of our test statistic under the null model, we performed simulations of a situation with no causal relationship between two traits. Specifically, we simulated $N_1$ bivariate normally distributed random variables $X_1$ and $X_2$, and then $N_2$ bivariate normally distributed random variables $Y_1$ and $Y_2$. The means of all simulated random variables were set to zero and the variances to 1. We then applied the method from the main text to obtain the relative likelihood in favor of a ``non-causal" model versus a ``causal" model. In Supplementary Figure \ref{f_causal_null}, we show the distribution of this ratio for different values of $N_1$ and $N_2$. Note that when $N_1$ is small (for example, five identified variants) the normal approximation breaks down; this is reflected in a number of simulations where the test statistic is unreasonably small (that is, the support for causality is unreasonably large). 
+
+\paragraph{Power simulations.}
+To test the power of our approach, we then performed simulations under a model that approximates the situation where one trait is causally upstream of another. Specifically, we simulated $N_1$ bivariate normally distributed random variables $X_1$ and $X_2$ with means of zero, variances of one, and correlation coefficient $C$. We then simulated $N_2$ bivariate normally distributed random variables $Y_1$ and $Y_2$ with means zero, variances one, and correlation coefficient zero. This approximates the asymmetric situation we expect if trait 1 causes trait 2. We then applied the method from the main text to obtain the relative likelihood of a ``non-causal" model versus a ``causal" model, and calculated the power as the fraction of simulations where this test statistic was less than 0.01. Shown in Supplementary Figure \ref{f_causal_supp} is this estimate of the power for different numbers of variants and correlation coefficients. It is important to note that the correlation we estimate (either in the simulations or in the analysis of real data) is not corrected for sampling error in the effect sizes, and so will be biased downwards from the ``true" genetic correlation. 
+
+\subsection{Expanded analysis of putative causally-related traits}
 As noted in the main text, in our initial scan for putative causally-related traits, we identified five pairs of traits. One of these was a putative causal relationship between risk of coronary artery disease and risk of rheumatoid arthritis (Supplementary Figure \ref{f_cad_ra}). In the data used, variants that increase risk of CAD tend to decrease risk of RA (Supplementary Figure \ref{f_cad_ra}A), while variants that influence RA appear to have no correlated effects on CAD (Supplementary Figure \ref{f_cad_ra}B). This echoes the patterns seem for the other phenotypes in Figure 5 in the main text. 
 
 However, three issues caused us to worry this correlation might be spurious. First, the number of variants identified in the GWAS of CAD was small--eleven, compared to 30 for BMI, 30 for hypothyroidism, and 41 for LDL cholesterol. Second, there appears to be no overall genome-wide genetic correlation between risk of CAD and risk of RA \citep{bulik2015atlas}. Third, this observed correlation is in the opposite direction to the known epidemiological correlation where individuals with rheumatoid arthritis are at higher risk of coronary artery disease (e.g. \citet{Maradit-Kremers:2005aa}). 
@@ -385,6 +367,21 @@ We thus identified an expanded set of loci that influence CAD risk using a large
 We next wished to test the robustness of the other inferred causal relationships. To do this, we used the fact that we discarded variants typed on the Metabochip from \citet{Locke:2015aa} for our main analysis. This was done to allow for imputation at the level of summary statistics, but resulted in a significant loss of power to identify variants since many individuals were typed using only this genotyping array. We thus re-processed the data from \citet{Locke:2015aa} as described in the main text, except that we 1) did not perform imputation, but 2) included variants typed on the Metabochip. This increased the number of loci identified at a false discovery rate of 10\% from 30 to 75. We plotted the effects of these variants on BMI and triglyceride levels (Supplementary Figure \ref{f_bmi_expanded}A), and on BMI and type 2 diabetes (Supplementary Figure \ref{f_bmi_expanded}A). The evidence for a correlation in the effect sizes of the set of 30 variants on BMI and triglyceride levels ($\rho =  0.74, P = 5.9 \times 10^{-6}$) remained strong in the set of 75 loci ($\rho = 0.59, P = 7.1 \times 10^{-8}$). Likewise, the evidence for a correlation in the effect sizes of the set of 30 variants on BMI and risk of type 2 diabetes ($\rho = 0.78, P = 1.6 \times 10^{-6}$) remained strong in the set of 75 loci ($\rho = 0.64, P = 6.2 \times 10^{-9}$). 
 
 Interestingly, in both cases a single locus appeared as an outlier--in the case of BMI and triglycerides, a variant near APOE was associated with decreased BMI but increased levels of triglycerides (Supplementary Figure \ref{f_bmi_expanded}A), while in the case of BMI and type 2 diabetes, a variant near TCF7L2 was associated with decreased BMI but highly increased risk of type 2 diabetes (Supplementary Figure \ref{f_bmi_expanded}A, see also \citet{Helgason:2007aa}). This suggests that both the APOE locus and the TCF7L2 locus may harbor variants that influence the downstream phenotypes (triglycerides and type 2 diabetes risk, respectively) through mechanisms that are independent of BMI. More generally, variants near TCF7L2 have been used in a number of Mendelian randomization studies of type 2 diabetes (e.g. \cite{Song:2012aa, Villareal:2010aa, Pfister:2011aa}); if this locus affects multiple phenotypes via different molecular mechanisms then it may not be an appropriate ``instrument" for this type of analysis. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.5]{figs/dist_ratio.pdf}
+\caption{. \textbf{Distribution of the relative likelihood under the null.} We simulated data under the null model where the effects of a variant on two phenotypes are independent, and fit the model described in the main text. Shown is the distribution of the relative likelihood using simulations of different numbers of genetic variants. In each panel $N1$ represents the number of simulated loci that influence trait 1, and $N2$ represents the number of simulated loci that influence trait 2. Each distribution is over 10,000 simulations. The grey line shows a relative likelihood of 0.01 (the threshold used in the main text) and the grey number is the fraction of simulations with a relative likelihood less than 0.01.}\label{f_causal_null}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.5]{figs/power_mrmr.pdf}
+\caption{. \textbf{Power to detect a causal relationship.} We simulated data under a model where one phenotype causes another, and fit the model described in the main text. Shown is the fraction of simulations where the relative likelihood in favor of a causal model is less than 0.01, as a function of the simulated correlation in effect sizes. Each point is a summary over 10,000 simulations.}\label{f_causal_power}
+\end{center}
+\end{figure}
+
 
 
 \begin{figure}
@@ -434,24 +431,27 @@ Interestingly, in both cases a single locus appeared as an outlier--in the case 
      chr12 & 110336719 & 113263518 & SH2B3 & ALL, PLT, FNBMD, PCV, TS, CD, RA, HB, HTHY, LDL, HDL, RBC, TC, CAD&  often led by nonsynonymous polymorphism rs3184504, maybe two signals \\ \hline
      chr9 &135298842 & 137041122 & ABO & ALL, PCV, TS, ATH, LDL, MIGR, CEI, HB, RBC, TC, CAD &  putatively driven by an eQTL at ABO or type A1 blood, see Figure in main text\\ \hline
      chr2  & 26894985 & 28598777& GCKR &  PLT, CUP, LDL, CD, FG, TG, HEIGHT, NST, TC & often led by nonsynonymous SNP rs1260326 \\ \hline
+     chr16 & 27445755  & 29036613 & none & ALL, BMI, TS, ATH, CD, RA, PD, NST, EDU & large LD block at 28-29Mb \\ \hline
      chr11 & 58780549 & 62223771 & none & PLT, HEIGHT, LDL, CD, FG, TG, HDL, TC & LD block covers FADS1, FADS2\\ \hline
-     chr16 & 27445755  & 29036613 & none & ALL, BMI, TS, ATH, CD, RA, PD, NST & large LD block at 28-29Mb \\ \hline
+      chr6 & 89973052 & 91843196 & none & ALL, ATH, CD, DIMP, SCZ, HTHY, UC & covers BACH2  \\ \hline
      chr6  & 33236497 & 35455756 &none& CUP, BMI, LDL, MIGR, HDL, TC, CAD& LD block from 34.5-35Mb\\ \hline
+     chr6& 125424383	 & 127540461 & none & UB, AAM, HEIGHT, EDU, MIGR, MPB & covers CENPW \\ \hline
      chr4  & 100678360 & 103221356 & SLC39A8 & ALL, HEIGHT, CD, PD, SCZ, HDL, NST & often led by nonsynonymous SNP rs13107325\\ \hline
-     chr10 & 63341695 & 65794114 & none & PLT, BMI, HEIGHT, MPV, TG, HDL & large LD block from 65Mb-65.5Mb \\  \hline
-     chr16  & 53382572 & 55903774 & none & CUP, AAM, BMI, T2D, AVD, HDL & intron of FTO \\ \hline
+     chr22  & 19912358 & 22357325 & none & HEIGHT, CD, RA, MCV, HDL, TC, UC & covers UBE2L3, lots of gaps in SNP coverage\\ \hline
+     chr19 & 44744108 & 46102697 & APOE & AD, LDL, WHR, TG, HDL, TC, NST & covers APOE\\ \hline
+     chr1  & 7247335  & 9365199 & none & ALL, AAM, FNBMD, ATH, PD, SCZ, UC & LD block covers RERE, SLC45A1 \\ \hline
+     chr16  & 53382572 & 55903774 & IRX3/IRX5 & CUP, AAM, BMI, T2D, AVD, HDL & intron of FTO \\ \hline
+     chr10 & 63341695 & 65794114 & none & PLT, BMI, HEIGHT, MPV, TG, HDL , EDU& large LD block from 65Mb-65.5Mb \\  \hline
+     chr8 & 79132861 & 81956395 & none & TS, ATH, RA, EDU, ALL, UC & covers ZBTB10\\ \hline
      chr15 & 58441366 & 59694116 & none & PCV, HB, TG, HDL, RBC, TC & nearest gene is LIPC\\ \hline
-     chr19 & 44744108 & 46102697 & APOE & AD, LDL, WHR, TG, HDL, NST & covers APOE\\ \hline
-     chr22  & 19912358 & 22357325 & none & HEIGHT, CD, RA, MCV, HDL, TC & covers UBE2L3, lots of gaps in SNP coverage\\ \hline
-     chr6 & 89973052 & 91843196 & none & ALL, ATH, CD, DIMP, SCZ, HTHY & covers BACH2  \\ \hline
      chr4 & 87534648 & 89238028 & none & PCV, HB, TG, HDL, RBC, TC & large LD block 87.5-88Mb\\ \hline 
      chr3 & 139954597 & 141339097 & none & ALL, MPB, CD, MCV, HEIGHT, NST & LD block covers ACFL2, ZBTB38, RASA2\\ \hline
-     chr1  & 7247335  & 9365199 & none & ALL, AAM, FNBMD, ATH, PD, SCZ & LD block covers RERE, SLC45A1 \\ \hline
+
       \hline
         
     \end{tabular}
     }
-      \caption{. \textbf{Genomic regions with a variant that influences a large number of phenotypes in these data.} We sorted all genomic regions in Supplementary Table 1 (excluding the MHC region from 26-34Mb on chromosome 6, and merging the two GWAS of age at menarche) based on the number of phenotypes a single variant was predicted to influence. Shown are all regions with a variant that influences six or more traits. The "putative causal gene" is listed only when there is a nonsynonymous SNP or otherwise well-functionally characterized allele among the strongest associations in the region.} 
+      \caption{. \textbf{Genomic regions with a variant that influences a large number of phenotypes in these data.} We sorted all genomic regions in Supplementary Table 1 (excluding the MHC region from 26-34Mb on chromosome 6, and merging the two GWAS of age at menarche) based on the number of phenotypes a single variant was predicted to influence. Shown are all regions with a variant that influences six or more traits. The ``putative causal gene" is listed only when there is a nonsynonymous SNP or otherwise functionally well-characterized allele among the strongest associations in the region.} 
 \end{table}
 \end{center}
 
